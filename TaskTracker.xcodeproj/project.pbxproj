@@ -11,7 +11,7 @@
 		B5C8A1F426C2D14A0021A268 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		B5CAD10926C20B5400A4102E /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10826C20B5400A4102E /* ErrorView.swift */; };
 		B5CAD10B26C20FDA00A4102E /* UserPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10A26C20FDA00A4102E /* UserPublisher.swift */; };
-		B5CAD10D26C2135200A4102E /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10C26C2135200A4102E /* Mock.swift */; };
+		B5CAD10D26C2135200A4102E /* MockDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10C26C2135200A4102E /* MockDatabase.swift */; };
 		B5CAD10F26C21BD900A4102E /* AsyncOpenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10E26C21BD900A4102E /* AsyncOpenView.swift */; };
 		B5CAD11126C21D7200A4102E /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD11026C21D7200A4102E /* LazyView.swift */; };
 		B5DF72B226C17330001D58E1 /* SyncLogLevel+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DF72B126C17330001D58E1 /* SyncLogLevel+Name.swift */; };
@@ -50,10 +50,11 @@
 /* Begin PBXFileReference section */
 		B5CAD10826C20B5400A4102E /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		B5CAD10A26C20FDA00A4102E /* UserPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPublisher.swift; sourceTree = "<group>"; };
-		B5CAD10C26C2135200A4102E /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
+		B5CAD10C26C2135200A4102E /* MockDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDatabase.swift; sourceTree = "<group>"; };
 		B5CAD10E26C21BD900A4102E /* AsyncOpenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncOpenView.swift; sourceTree = "<group>"; };
 		B5CAD11026C21D7200A4102E /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
 		B5DF72B126C17330001D58E1 /* SyncLogLevel+Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncLogLevel+Name.swift"; sourceTree = "<group>"; };
+		C516F2E426DD66E900CEB590 /* TaskTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskTracker.entitlements; sourceTree = "<group>"; };
 		F86A0D932550F873003D3E60 /* LogoutButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutButton.swift; sourceTree = "<group>"; };
 		F887347D2544A44B002B5B31 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F8BC89AA251F9CC300566416 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -150,6 +151,7 @@
 		F8E140CA2511935F003B4289 /* TaskTracker */ = {
 			isa = PBXGroup;
 			children = (
+				C516F2E426DD66E900CEB590 /* TaskTracker.entitlements */,
 				F8E140CB2511935F003B4289 /* App.swift */,
 				F8BC89CD251FB5E500566416 /* AppState.swift */,
 				F8E140CF25119360003B4289 /* Assets.xcassets */,
@@ -167,7 +169,7 @@
 		F8E140D125119360003B4289 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				B5CAD10C26C2135200A4102E /* Mock.swift */,
+				B5CAD10C26C2135200A4102E /* MockDatabase.swift */,
 				F8E140D225119360003B4289 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
@@ -350,7 +352,7 @@
 				F86A0D942550F873003D3E60 /* LogoutButton.swift in Sources */,
 				F8BC89AB251F9CC300566416 /* Task.swift in Sources */,
 				B5CAD10F26C21BD900A4102E /* AsyncOpenView.swift in Sources */,
-				B5CAD10D26C2135200A4102E /* Mock.swift in Sources */,
+				B5CAD10D26C2135200A4102E /* MockDatabase.swift in Sources */,
 				F8E1419C2512BFC3003B4289 /* AddTaskView.swift in Sources */,
 				B5CAD10926C20B5400A4102E /* ErrorView.swift in Sources */,
 				F887347E2544A44B002B5B31 /* Constants.swift in Sources */,
@@ -511,8 +513,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TaskTracker/TaskTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TaskTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = 8G8C7E8465;
 				ENABLE_PREVIEWS = YES;
@@ -522,11 +525,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "co.log-g.TaskTracker";
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.hiddenplace.TaskTracker;
 				PRODUCT_NAME = "✅ Tasks";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -536,8 +541,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TaskTracker/TaskTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TaskTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = 8G8C7E8465;
 				ENABLE_PREVIEWS = YES;
@@ -547,11 +553,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "co.log-g.TaskTracker";
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.hiddenplace.TaskTracker;
 				PRODUCT_NAME = "✅ Tasks";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

@@ -91,13 +91,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B5CAD11326C2C7DB00A4102E /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		F8BC899C251F9C9A00566416 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,7 +102,6 @@
 		F8E140BF2511935F003B4289 = {
 			isa = PBXGroup;
 			children = (
-				B5CAD11326C2C7DB00A4102E /* Packages */,
 				F8E140CA2511935F003B4289 /* TaskTracker */,
 				F8E140DC25119361003B4289 /* TaskTrackerTests */,
 				F8E140E725119361003B4289 /* TaskTrackerUITests */,

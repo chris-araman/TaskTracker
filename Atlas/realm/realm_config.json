@@ -1,8 +1,0 @@
-{
-    "app_id": "task-tracker-flfpp",
-    "config_version": 20210101,
-    "name": "task-tracker",
-    "location": "US-VA",
-    "deployment_model": "LOCAL",
-    "environment": "development"
-}

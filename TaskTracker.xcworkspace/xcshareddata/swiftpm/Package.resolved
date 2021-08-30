@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CombineCloudKit",
+        "repositoryURL": "https://github.com/chris-araman/CombineCloudKit.git",
+        "state": {
+          "branch": null,
+          "revision": "9e86ac6d8ce0b4d0f7cb45fbf02ebcf3667c579d",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

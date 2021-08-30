@@ -35,10 +35,6 @@ struct ListView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle("Tasks", displayMode: .large)
         .navigationBarItems(
-            leading:
-                LogoutButton() {
-                    presentationMode.wrappedValue.dismiss()
-                },
             trailing:
                 NavigationLink(destination: AddTaskView()) {
                     Text("+")

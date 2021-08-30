@@ -1,11 +1,9 @@
 //
 //  Task.swift
-//  RealmTaskTracker
+//  TaskTracker
 //
 //  Created by Ben Chatelain on 9/26/20.
 //
-
-import RealmSwift
 
 // MARK: - TaskStatus
 enum TaskStatus: String, PersistableEnum {

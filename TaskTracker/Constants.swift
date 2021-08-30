@@ -1,6 +1,6 @@
 //
 //  Constants.swift
-//  RealmTaskTracker
+//  TaskTracker
 //
 //  Created by Ben Chatelain on 10/24/20.
 //
@@ -14,9 +14,9 @@ struct Constants {
         return version
     }()
 
-    static let realmAppId: String = {
-        guard let version = Bundle.main.object(forInfoDictionaryKey: "REALM_APP_ID") as? String
-            else { fatalError("Info.plist does not contain REALM_APP_ID") }
+    static let AppId: String = {
+        guard let version = Bundle.main.object(forInfoDictionaryKey: "_APP_ID") as? String
+            else { fatalError("Info.plist does not contain _APP_ID") }
         return version
     }()
 

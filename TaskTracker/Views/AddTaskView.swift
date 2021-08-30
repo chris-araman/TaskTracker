@@ -1,11 +1,10 @@
 //
 //  AddTaskView.swift
-//  RealmTaskTracker
+//  TaskTracker
 //
 //  Created by Ben Chatelain on 9/16/20.
 //
 
-import RealmSwift
 import SwiftUI
 
 struct AddTaskView: View {

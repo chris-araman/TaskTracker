@@ -1,6 +1,6 @@
 //
 //  LogoutButton.swift
-//  RealmTaskTracker
+//  TaskTracker
 //
 //  Created by Ben Chatelain on 11/2/20.
 //

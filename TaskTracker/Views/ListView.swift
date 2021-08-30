@@ -1,17 +1,16 @@
 //
 //  ListView.swift
-//  RealmTaskTracker
+//  TaskTracker
 //
 //  Created by Ben Chatelain on 9/15/20.
 //
 
-import RealmSwift
 import SwiftUI
 
 /// Screen containing a list of tasks. Implements functionality for adding, rearranging, and deleting tasks.
 struct ListView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+
     /// All of the user's tasks.
     @ObservedResults(Task.self) var tasks
 

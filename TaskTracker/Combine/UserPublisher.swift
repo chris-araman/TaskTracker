@@ -1,12 +1,11 @@
 //
 //  UserPublisher.swift
-//  RealmTaskTracker
+//  TaskTracker
 //
 //  Created by Ben Chatelain on 8/9/21.
 //
 
 import Combine
-import RealmSwift
 import Foundation
 
 /// Email and password authentication helper.

@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F8E140C72511935F003B4289"
                BuildableName = "&#x2705; Tasks.app"
-               BlueprintName = "RealmTaskTracker"
-               ReferencedContainer = "container:RealmTaskTracker.xcodeproj">
+               BlueprintName = "TaskTracker"
+               ReferencedContainer = "container:TaskTracker.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F8E140D825119360003B4289"
-               BuildableName = "RealmTaskTrackerTests.xctest"
-               BlueprintName = "RealmTaskTrackerTests"
-               ReferencedContainer = "container:RealmTaskTracker.xcodeproj">
+               BuildableName = "TaskTrackerTests.xctest"
+               BlueprintName = "TaskTrackerTests"
+               ReferencedContainer = "container:TaskTracker.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F8E140E325119361003B4289"
-               BuildableName = "RealmTaskTrackerUITests.xctest"
-               BlueprintName = "RealmTaskTrackerUITests"
-               ReferencedContainer = "container:RealmTaskTracker.xcodeproj">
+               BuildableName = "TaskTrackerUITests.xctest"
+               BlueprintName = "TaskTrackerUITests"
+               ReferencedContainer = "container:TaskTracker.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -66,8 +66,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F8E140C72511935F003B4289"
             BuildableName = "&#x2705; Tasks.app"
-            BlueprintName = "RealmTaskTracker"
-            ReferencedContainer = "container:RealmTaskTracker.xcodeproj">
+            BlueprintName = "TaskTracker"
+            ReferencedContainer = "container:TaskTracker.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -83,8 +83,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F8E140C72511935F003B4289"
             BuildableName = "&#x2705; Tasks.app"
-            BlueprintName = "RealmTaskTracker"
-            ReferencedContainer = "container:RealmTaskTracker.xcodeproj">
+            BlueprintName = "TaskTracker"
+            ReferencedContainer = "container:TaskTracker.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

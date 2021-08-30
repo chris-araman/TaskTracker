@@ -1,13 +1,11 @@
 //
-//  MockRealms.swift
-//  RealmTaskTracker
+//  MockDatabase.swift
+//  TaskTracker
 //
 //  Created by Ben Chatelain on 8/9/21.
 //
 
-import RealmSwift
-
-class MockRealms {
+class MockDatabase {
     static var previewRealm: Realm {
         get {
             let realm = try! Realm(configuration: Realm.Configuration(inMemoryIdentifier: "previewRealm", objectTypes: [Task.self]))

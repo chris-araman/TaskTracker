@@ -1,6 +1,6 @@
 //
 //  App.swift
-//  RealmTaskTracker
+//  TaskTracker
 //
 //  Created by Ben Chatelain on 9/15/20.
 //

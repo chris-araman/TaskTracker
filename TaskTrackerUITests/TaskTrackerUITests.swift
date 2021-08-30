@@ -1,13 +1,13 @@
 //
-//  RealmTaskTrackerUITests.swift
-//  RealmTaskTrackerUITests
+//  TaskTrackerUITests.swift
+//  TaskTrackerUITests
 //
 //  Created by Ben Chatelain on 9/15/20.
 //
 
 import XCTest
 
-class RealmTaskTrackerUITests: XCTestCase {
+class TaskTrackerUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

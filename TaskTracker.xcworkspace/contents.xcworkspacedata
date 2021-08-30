@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:RealmTaskTracker.xcodeproj">
+      location = "group:TaskTracker.xcodeproj">
    </FileRef>
 </Workspace>

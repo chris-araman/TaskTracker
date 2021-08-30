@@ -46,7 +46,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>REALM_APP_ID</key>
-	<string>task-tracker-flfpp</string>
 </dict>
 </plist>

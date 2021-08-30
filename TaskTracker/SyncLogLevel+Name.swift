@@ -1,11 +1,9 @@
 //
 //  SyncLogLevel+Name.swift
-//  RealmTaskTracker
+//  TaskTracker
 //
 //  Created by Ben Chatelain on 8/9/21.
 //
-
-import RealmSwift
 
 /// RLMSyncLogLevel case names
 extension SyncLogLevel {

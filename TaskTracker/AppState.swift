@@ -1,16 +1,16 @@
 //
 //  AppState.swift
-//  RealmTaskTracker
+//  TaskTracker
 //
 //  Created by Ben Chatelain on 9/26/20.
 //
 
-import RealmSwift
+import Swift
 import Combine
 import Foundation
 
-/// Core app logic including Realm app and Combine publishers. No longer used.
-/// TODO: Move syng logging and error handling to 
+/// Core app logic including  app and Combine publishers. No longer used.
+/// TODO: Move syng logging and error handling to
 final class AppState {
     /// Cancellables to be retained for any Future.
     var cancellables = Set<AnyCancellable>()
@@ -21,9 +21,9 @@ final class AppState {
     /// Token for download progress notification block.
     var downloadProgressToken: SyncSession.ProgressNotificationToken?
 
-    /// The Realm sync app.
-    private let app: RealmSwift.App = {
-        let app = RealmSwift.App(id: Constants.realmAppId)
+    /// The  sync app.
+    private let app: Swift.App = {
+        let app = Swift.App(id: Constants.AppId)
         let syncManager = app.syncManager
         syncManager.logLevel = .info
         syncManager.logger = { (level: SyncLogLevel, message: String) in
@@ -31,7 +31,7 @@ final class AppState {
         }
         syncManager.errorHandler = { (error, session) in
             print("Sync Error: \(error)")
-            // https://docs.realm.io/sync/using-synced-realms/errors
+            // https://docs..io/sync/using-synced-s/errors
             if let syncError = error as? SyncError {
                 switch syncError.code {
                 case .permissionDeniedError:
@@ -46,8 +46,8 @@ final class AppState {
                 case .clientResetError:
                     if let (path, clientResetToken) = syncError.clientResetInfo() {
                         // TODO: close and backup
-                        //closeRealmSafely()
-                        //saveBackupRealmPath(path)
+                        //closeSafely()
+                        //saveBackupPath(path)
                         SyncSession.immediatelyHandleError(clientResetToken, syncManager: app.syncManager)
                     }
                 default:
@@ -62,22 +62,22 @@ final class AppState {
     }()
 
     init() {
-        // Create a private subject for the opened realm, so that:
-        // - if we are not using Realm Sync, we can open the realm immediately.
-        // - if we are using Realm Sync, we can open the realm later after login.
-        let realmPublisher = PassthroughSubject<Realm, Error>()
+        // Create a private subject for the opened , so that:
+        // - if we are not using  Sync, we can open the  immediately.
+        // - if we are using  Sync, we can open the  later after login.
+        let Publisher = PassthroughSubject<, Error>()
 
-        // Specify what to do when the realm opens, regardless of whether
-        // we're authenticated and using Realm Sync or not.
-        realmPublisher
+        // Specify what to do when the  opens, regardless of whether
+        // we're authenticated and using  Sync or not.
+        Publisher
             .sink(receiveCompletion: { result in
                 // Check for failure.
                 if case let .failure(error) = result {
-                    print("Failed to log in and open realm: \(error.localizedDescription)")
+                    print("Failed to log in and open : \(error.localizedDescription)")
                 }
-            }, receiveValue: { realm in
-                // The realm has successfully opened.
-                let syncSession = realm.syncSession!
+            }, receiveValue: {  in
+                // The  has successfully opened.
+                let syncSession = .syncSession!
 
                 // Observe using Combine
                 syncSession.publisher(for: \.connectionState)

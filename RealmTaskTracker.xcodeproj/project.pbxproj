@@ -517,7 +517,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"RealmTaskTracker/Preview Content\"";
-				DEVELOPMENT_TEAM = MTGSZH8QM4;
+				DEVELOPMENT_TEAM = 8G8C7E8465;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = RealmTaskTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -542,7 +542,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"RealmTaskTracker/Preview Content\"";
-				DEVELOPMENT_TEAM = MTGSZH8QM4;
+				DEVELOPMENT_TEAM = 8G8C7E8465;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = RealmTaskTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -564,7 +564,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MTGSZH8QM4;
+				DEVELOPMENT_TEAM = 8G8C7E8465;
 				INFOPLIST_FILE = RealmTaskTrackerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -585,7 +585,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MTGSZH8QM4;
+				DEVELOPMENT_TEAM = 8G8C7E8465;
 				INFOPLIST_FILE = RealmTaskTrackerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -605,7 +605,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MTGSZH8QM4;
+				DEVELOPMENT_TEAM = 8G8C7E8465;
 				INFOPLIST_FILE = RealmTaskTrackerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -624,7 +624,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MTGSZH8QM4;
+				DEVELOPMENT_TEAM = 8G8C7E8465;
 				INFOPLIST_FILE = RealmTaskTrackerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

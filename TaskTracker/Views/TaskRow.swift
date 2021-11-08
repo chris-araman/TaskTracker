@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TaskRow: View {
-    @ObservedRealmObject var task: Task
+    @ObservedObject var task: Task
 
     var body: some View {
         HStack {

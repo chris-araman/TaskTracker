@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B5C8A1F226C2D14A0021A268 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		B5C8A1F426C2D14A0021A268 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		B5CAD10926C20B5400A4102E /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10826C20B5400A4102E /* ErrorView.swift */; };
 		B5CAD10D26C2135200A4102E /* MockDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10C26C2135200A4102E /* MockDatabase.swift */; };
 		B5CAD10F26C21BD900A4102E /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10E26C21BD900A4102E /* TasksView.swift */; };
-		B5CAD11126C21D7200A4102E /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD11026C21D7200A4102E /* LazyView.swift */; };
 		C591F17C26DD62C60021B3CF /* CombineCloudKit in Frameworks */ = {isa = PBXBuildFile; productRef = C591F17B26DD62C60021B3CF /* CombineCloudKit */; };
+		C5B5348526DEF8500017BE02 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B5348426DEF8500017BE02 /* CloudKit.framework */; };
+		C5B5348726DF2C180017BE02 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B5348626DF2C180017BE02 /* Database.swift */; };
 		F8BC89AB251F9CC300566416 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC89AA251F9CC300566416 /* Task.swift */; };
 		F8E140CC2511935F003B4289 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E140CB2511935F003B4289 /* App.swift */; };
 		F8E140D025119360003B4289 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8E140CF25119360003B4289 /* Assets.xcassets */; };
@@ -42,11 +40,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B5CAD10826C20B5400A4102E /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		B5CAD10C26C2135200A4102E /* MockDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDatabase.swift; sourceTree = "<group>"; };
 		B5CAD10E26C21BD900A4102E /* TasksView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
-		B5CAD11026C21D7200A4102E /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
 		C516F2E426DD66E900CEB590 /* TaskTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskTracker.entitlements; sourceTree = "<group>"; };
+		C5B5348426DEF8500017BE02 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		C5B5348626DF2C180017BE02 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		F8BC89AA251F9CC300566416 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		F8E140C82511935F003B4289 /* ✅ Tasks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "✅ Tasks.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8E140CB2511935F003B4289 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
@@ -69,8 +67,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C591F17C26DD62C60021B3CF /* CombineCloudKit in Frameworks */,
-				B5C8A1F426C2D14A0021A268 /* (null) in Frameworks */,
-				B5C8A1F226C2D14A0021A268 /* (null) in Frameworks */,
+				C5B5348526DEF8500017BE02 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +88,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C50581652727B80500D7FEB6 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				C5B5348626DF2C180017BE02 /* Database.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C5B5348326DEF8500017BE02 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C5B5348426DEF8500017BE02 /* CloudKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F8BC899C251F9C9A00566416 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +118,7 @@
 				F8E140CA2511935F003B4289 /* TaskTracker */,
 				F8E140DC25119361003B4289 /* TaskTrackerTests */,
 				F8E140E725119361003B4289 /* TaskTrackerUITests */,
+				C5B5348326DEF8500017BE02 /* Frameworks */,
 				F8E140C92511935F003B4289 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -129,6 +143,7 @@
 				F8BC899C251F9C9A00566416 /* Models */,
 				F8E140D125119360003B4289 /* Preview Content */,
 				F8E141562511A64A003B4289 /* Views */,
+				C50581652727B80500D7FEB6 /* ViewModels */,
 			);
 			path = TaskTracker;
 			sourceTree = "<group>";
@@ -164,8 +179,6 @@
 			children = (
 				F8E1419B2512BFC3003B4289 /* AddTaskView.swift */,
 				B5CAD10E26C21BD900A4102E /* TasksView.swift */,
-				B5CAD10826C20B5400A4102E /* ErrorView.swift */,
-				B5CAD11026C21D7200A4102E /* LazyView.swift */,
 				F8E1416A2511C537003B4289 /* ListView.swift */,
 				F8E141A6251312CC003B4289 /* TaskRow.swift */,
 			);
@@ -308,13 +321,12 @@
 			files = (
 				F8E140CC2511935F003B4289 /* App.swift in Sources */,
 				F8E141A7251312CC003B4289 /* TaskRow.swift in Sources */,
-				B5CAD11126C21D7200A4102E /* LazyView.swift in Sources */,
 				F8E1416B2511C537003B4289 /* ListView.swift in Sources */,
 				F8BC89AB251F9CC300566416 /* Task.swift in Sources */,
 				B5CAD10F26C21BD900A4102E /* TasksView.swift in Sources */,
 				B5CAD10D26C2135200A4102E /* MockDatabase.swift in Sources */,
 				F8E1419C2512BFC3003B4289 /* AddTaskView.swift in Sources */,
-				B5CAD10926C20B5400A4102E /* ErrorView.swift in Sources */,
+				C5B5348726DF2C180017BE02 /* Database.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,7 +413,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -456,7 +468,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -478,7 +490,7 @@
 				DEVELOPMENT_TEAM = 8G8C7E8465;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TaskTracker/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -506,7 +518,7 @@
 				DEVELOPMENT_TEAM = 8G8C7E8465;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TaskTracker/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -529,7 +541,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8G8C7E8465;
 				INFOPLIST_FILE = TaskTrackerTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -539,7 +550,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaskTracker.app/TaskTracker";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/✅ Tasks.app/✅ Tasks";
 			};
 			name = Debug;
 		};
@@ -550,7 +561,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8G8C7E8465;
 				INFOPLIST_FILE = TaskTrackerTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -560,7 +570,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaskTracker.app/TaskTracker";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/✅ Tasks.app/✅ Tasks";
 			};
 			name = Release;
 		};

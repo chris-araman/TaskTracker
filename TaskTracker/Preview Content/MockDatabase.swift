@@ -5,15 +5,12 @@
 //  Created by Ben Chatelain on 8/9/21.
 //
 
-class MockDatabase {
-    static var previewRealm: Realm {
-        get {
-            let realm = try! Realm(configuration: Realm.Configuration(inMemoryIdentifier: "previewRealm", objectTypes: [Task.self]))
-            try! realm.write {
-                _ = Task(name: "New task")
-                _ = Task(name: "Another task")
-            }
-            return realm
-        }
+import CombineCloudKit
+
+class MockDatabase: Database {
+    // static let preview = CombineCloudKitTests.MockDatabase()
+    // _ = Task(name: "New task")
+    // _ = Task(name: "Another task")
+    func save(_ task: Task) async throws {
     }
 }

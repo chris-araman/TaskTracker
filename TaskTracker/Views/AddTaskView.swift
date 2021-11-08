@@ -5,13 +5,17 @@
 //  Created by Ben Chatelain on 9/16/20.
 //
 
+import CombineCloudKit
+import Combine
 import SwiftUI
 
 struct AddTaskView: View {
-    @Environment(\.realm) var realm: Realm
+    @Environment(\.database) var database: Database
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     @State private var enteredText: String = ""
+
+    private var cancellable: AnyCancellable?
 
     var body: some View {
         Form {
@@ -27,18 +31,16 @@ struct AddTaskView: View {
             return
         }
 
-        // Create a new Task with the text that the user entered.
-        let task = Task(name: enteredText)
-        do {
-            try realm.write {
-                realm.add(task)
+        _Concurrency.Task.detached {
+            // Create a new Task with the text that the user entered.
+            let task = Task(name: enteredText)
+            do {
+                try await database.save(task)
+                presentationMode.wrappedValue.dismiss()
+            } catch {
+                // TODO: Handle failure
             }
-        } catch {
-            print("Error add task: \(task)")
         }
-
-        print("Task added! \(task)")
-        presentationMode.wrappedValue.dismiss()
     }
 }
 

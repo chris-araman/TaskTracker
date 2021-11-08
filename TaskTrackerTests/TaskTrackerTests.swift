@@ -6,7 +6,6 @@
 //
 
 import XCTest
-@testable import TaskTracker
 
 class TaskTrackerTests: XCTestCase {
 

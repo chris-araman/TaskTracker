@@ -5,28 +5,45 @@
 //  Created by Ben Chatelain on 9/26/20.
 //
 
-// MARK: - TaskStatus
-enum TaskStatus: String, PersistableEnum {
-    case Open
-    case InProgress
-    case Complete
-}
+import CloudKit
 
-// MARK: - Task
-class Task: Object, ObjectKeyIdentifiable {
-    /// Declares the _id member as the primary key to the realm.
-    /// Unique ID of the Task.
-    @Persisted(primaryKey: true) var _id: ObjectId
+class Task: Identifiable, ObservableObject {
+    enum Status: String {
+        case Open
+        case InProgress
+        case Complete
+    }
 
-    /// Displayed name of the task.
-    @Persisted var name: String
-
-    /// Current status of the task. Defaults to "Open".
-    @Persisted var status: TaskStatus
+    let record: CKRecord
 
     /// Initializer for previews.
     convenience init(name: String) {
         self.init()
         self.name = name
+    }
+
+    convenience init() {
+        self.init(from: CKRecord(recordType: "Task"))
+    }
+
+    init(from record: CKRecord) {
+        self.record = record
+    }
+
+    /// The stable identity of the entity associated with this instance.
+    var id: CKRecord.ID {
+        get { record.recordID }
+    }
+
+    /// Displayed name of the task.
+    var name: String {
+        get { record["name"] as! String }
+        set { record["name"] = newValue }
+    }
+
+    /// Current status of the task. Defaults to "Open".
+    var status: Status {
+        get { Status(rawValue: record["status"] as! String)! }
+        set { record["status"] = newValue.rawValue }
     }
 }

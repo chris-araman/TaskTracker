@@ -5,42 +5,52 @@
 //  Created by Ben Chatelain on 9/15/20.
 //
 
+import CombineCloudKit
 import SwiftUI
 
 /// Screen containing a list of tasks. Implements functionality for adding, rearranging, and deleting tasks.
 struct ListView: View {
+    @Environment(\.database) var database: Database
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     /// All of the user's tasks.
-    @ObservedResults(Task.self) var tasks
+    @State private var tasks = [Task]()
+    // FIXME: database.fetch("Task").map(Task.init(from:))
 
     @State private var showingActionSheet = false
 
     /// Selected task for updating status.
-    @StateRealmObject var editTask: Task
+    @State private var selection: Task.ID?
+    //@StateObject var editTask: Task
 
     var body: some View {
-        List {
+        List(selection: $selection) {
             ForEach(tasks) { task in
                 TaskRow(task: task)
                     .onTapGesture {
-                        editTask = task
                         showingActionSheet = true
                     }
                     .actionSheet(isPresented: $showingActionSheet, content: editTaskStatus)
             }
-            .onDelete(perform: $tasks.remove)
-//            .onMove(perform: $tasks.move)
+            .onDelete { indices in
+                tasks.remove(atOffsets: indices)
+            }
+//            .onMove(perform: tasks.move)
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle("Tasks", displayMode: .large)
         .navigationBarItems(
             trailing:
-                NavigationLink(destination: AddTaskView()) {
-                    Text("+")
+                withAnimation(.easeInOut(duration: 3.0)) {
+                    NavigationLink(destination: AddTaskView()) {
+                        Text("+")
+                    }
                 }
-                .animation(.easeInOut(duration: 3.0))
         )
+    }
+
+    var editTask: Task? {
+        tasks.first { task in task.id == selection }
     }
 
     /// Builds an action sheet to toggle the selected task's status.
@@ -49,19 +59,19 @@ struct ListView: View {
 
         // If the task is not in the Open state, we can set it to open. Otherwise, that action will not be available.
         // We do this for the other two states -- InProgress and Complete.
-        if (editTask.status != .Open) {
+        if (editTask?.status != .Open) {
             buttons.append(.default(Text("Open"), action: {
                 self.setTaskStatus(newStatus: .Open)
             }))
         }
 
-        if (editTask.status != .InProgress) {
+        if (editTask?.status != .InProgress) {
             buttons.append(.default(Text("Start Progress"), action: {
                 self.setTaskStatus(newStatus: .InProgress)
             }))
         }
 
-        if (editTask.status != .Complete) {
+        if (editTask?.status != .Complete) {
             buttons.append(.default(Text("Complete"), action: {
                 self.setTaskStatus(newStatus: .Complete)
             }))
@@ -69,33 +79,32 @@ struct ListView: View {
 
         buttons.append(.cancel())
 
-        return ActionSheet(title: Text(editTask.name), message: Text("Select an action"), buttons: buttons)
+        return ActionSheet(title: Text(editTask?.name ?? ""), message: Text("Select an action"), buttons: buttons)
     }
 
     /// Sets editTask to the given status. The task and its realm are fozen and must be thawed to change.
     /// - Parameter newStatus: TaskStatus to set
-    func setTaskStatus(newStatus: TaskStatus) {
-        if let realm = tasks.realm?.thaw() {
+    func setTaskStatus(newStatus: Task.Status) {
+        guard let editTask = editTask else {
+            return
+        }
+
+        editTask.status = newStatus
+        _Concurrency.Task.detached {
             do {
-                // Any modifications to managed objects must occur in a write block.
-                // When we modify the Task's state, that change is automatically reflected in the realm.
-                try realm.write {
-                    if let task = editTask.thaw() {
-                        task.status = newStatus
-                    }
-                }
+                try await database.save(editTask)
             } catch {
-                debugPrint("Error updating task status: \(error)")
+                // TODO: Handle failure
             }
         }
     }
 
 }
 
-struct TasksView_Previews: PreviewProvider {
+struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        ListView(editTask: Task())
+        ListView()
             .navigationBarTitle("Tasks")
-            .environment(\.realm, MockRealms.previewRealm)
+            .database(MockDatabase())
     }
 }

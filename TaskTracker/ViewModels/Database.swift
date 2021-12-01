@@ -28,32 +28,90 @@ extension View {
 }
 
 protocol Database {
-    func save(_ task: Task) async throws
+    var accountStatus: CKAccountStatus { get }
+    var tasks: [Task] { get }
+
+    func save(_ task: CKRecord) async throws
+    func delete(_ tasks: [CKRecord.ID]) async throws
 }
 
 class CloudKitDatabase: Database, ObservableObject {
-    private let database: CCKDatabase = CKContainer.default().privateCloudDatabase
-    private var cancellables = Set<AnyCancellable>()
+    @Published var accountStatus = CKAccountStatus.couldNotDetermine
+    @Published var tasks = [Task]()
 
-    func save(_ task: Task) async throws {
+    private let container = CKContainer.default()
+    private let database: CCKDatabase
+
+    init() {
+        self.database = container.privateCloudDatabase
+        container.accountStatus().catch { _ in Just(.couldNotDetermine) }.assign(to: &$accountStatus)
+        _Concurrency.Task.detached {
+            do {
+                try await self.fetchAll()
+            }
+            catch {
+                // TODO: Handle failure
+                print("Failed: \(error)")
+            }
+        }
+    }
+
+    func fetchAll() async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            database.save(record: task.record)
+            database.performQuery(ofType: "Task")
                 .receive(on: RunLoop.main)
-                .sink(
-                    receiveCompletion: { completion in
-                        if case .failure(let error) = completion {
-                            continuation.resume(throwing: error)
-                            return
-                        }
-
-                        continuation.resume()
-                    },
-                    receiveValue: { value in
-                        print("Task added! \(task)")
+                .collect()
+                .map { records in
+                    continuation.resume()
+                    return records.map { record in
+                        Task(from: record)
                     }
-                )
-                // FIXME: Is this cancellable stored indefinitely?
-                .store(in: &cancellables)
+                }
+                .catch { error -> AnyPublisher<[Task], Never> in
+                    continuation.resume(throwing: error)
+                    return Just(self.tasks).eraseToAnyPublisher()
+                }
+                .assign(to: &$tasks)
+        }
+    }
+
+    func save(_ task: CKRecord) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            database.save(record: task)
+                .receive(on: RunLoop.main)
+                .map { record in
+                    continuation.resume()
+                    var tasks = self.tasks
+                    tasks.append(Task(from: record))
+                    return tasks
+                }
+                .catch { error -> AnyPublisher<[Task], Never> in
+                    continuation.resume(throwing: error)
+                    return Just(self.tasks).eraseToAnyPublisher()
+                }
+                .assign(to: &$tasks)
+        }
+    }
+
+    func delete(_ tasks: [CKRecord.ID]) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            database.delete(recordIDs: tasks)
+                .receive(on: RunLoop.main)
+                .map { recordID in
+                    continuation.resume()
+
+                    var tasks = self.tasks
+                    tasks.removeAll { task in
+                        task.record.recordID == recordID
+                    }
+
+                    return tasks
+                }
+                .catch { error -> AnyPublisher<[Task], Never> in
+                    continuation.resume(throwing: error)
+                    return Just(self.tasks).eraseToAnyPublisher()
+                }
+                .assign(to: &$tasks)
         }
     }
 }

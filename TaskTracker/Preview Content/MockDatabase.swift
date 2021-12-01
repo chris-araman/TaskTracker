@@ -5,12 +5,21 @@
 //  Created by Ben Chatelain on 8/9/21.
 //
 
+import CloudKit
 import CombineCloudKit
 
 class MockDatabase: Database {
-    // static let preview = CombineCloudKitTests.MockDatabase()
-    // _ = Task(name: "New task")
-    // _ = Task(name: "Another task")
-    func save(_ task: Task) async throws {
+    var accountStatus: CKAccountStatus {
+        get { .available }
+    }
+
+    var tasks: [Task] {
+        get { [Task(name: "Foo"), Task(name: "Bar")] }
+    }
+
+    func save(_ task: CKRecord) async throws {
+    }
+
+    func delete(_ tasks: [CKRecord.ID]) async throws {
     }
 }

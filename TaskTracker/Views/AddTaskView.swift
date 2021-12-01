@@ -33,12 +33,15 @@ struct AddTaskView: View {
 
         _Concurrency.Task.detached {
             // Create a new Task with the text that the user entered.
-            let task = Task(name: enteredText)
+            let task = Task(name: enteredText).record
             do {
                 try await database.save(task)
-                presentationMode.wrappedValue.dismiss()
+                DispatchQueue.main.async {
+                    presentationMode.wrappedValue.dismiss()
+                }
             } catch {
                 // TODO: Handle failure
+                print("Failed: \(error)")
             }
         }
     }

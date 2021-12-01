@@ -7,7 +7,7 @@
 
 import CloudKit
 
-class Task: Identifiable, ObservableObject {
+struct Task: Hashable, Identifiable {
     enum Status: String {
         case Open
         case InProgress
@@ -16,14 +16,14 @@ class Task: Identifiable, ObservableObject {
 
     let record: CKRecord
 
-    /// Initializer for previews.
-    convenience init(name: String) {
-        self.init()
-        self.name = name
+    init() {
+        self.init(from: CKRecord(recordType: "Task"))
     }
 
-    convenience init() {
-        self.init(from: CKRecord(recordType: "Task"))
+    /// Initializer for previews.
+    init(name: String) {
+        self.init()
+        self.name = name
     }
 
     init(from record: CKRecord) {

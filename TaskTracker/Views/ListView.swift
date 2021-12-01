@@ -14,7 +14,9 @@ struct ListView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     /// All of the user's tasks.
-    @State private var tasks = [Task]()
+    private var tasks : [Task] {
+        get { database.tasks }
+    }
     // FIXME: database.fetch("Task").map(Task.init(from:))
 
     @State private var showingActionSheet = false
@@ -33,7 +35,17 @@ struct ListView: View {
                     .actionSheet(isPresented: $showingActionSheet, content: editTaskStatus)
             }
             .onDelete { indices in
-                tasks.remove(atOffsets: indices)
+                let toDelete = indices.map { index in
+                    tasks[index].record.recordID
+                }
+                _Concurrency.Task.detached {
+                    do {
+                        try await database.delete(toDelete)
+                    } catch {
+                        // TODO: Handle failure
+                        print("Failed: \(error)")
+                    }
+                }
             }
 //            .onMove(perform: tasks.move)
         }
@@ -85,14 +97,15 @@ struct ListView: View {
     /// Sets editTask to the given status. The task and its realm are fozen and must be thawed to change.
     /// - Parameter newStatus: TaskStatus to set
     func setTaskStatus(newStatus: Task.Status) {
-        guard let editTask = editTask else {
+        guard var editTask = editTask else {
             return
         }
 
         editTask.status = newStatus
+        let record = editTask.record
         _Concurrency.Task.detached {
             do {
-                try await database.save(editTask)
+                try await database.save(record)
             } catch {
                 // TODO: Handle failure
             }

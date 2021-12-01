@@ -37,13 +37,32 @@ struct Task: Hashable, Identifiable {
 
     /// Displayed name of the task.
     var name: String {
-        get { record["name"] as! String }
-        set { record["name"] = newValue }
+        get {
+            guard let value = record["name"] as? String else {
+                return "Unknown"
+            }
+
+            return value
+        }
+
+        set {
+            record["name"] = newValue
+        }
     }
 
     /// Current status of the task. Defaults to "Open".
     var status: Status {
-        get { Status(rawValue: record["status"] as! String)! }
-        set { record["status"] = newValue.rawValue }
+        get {
+            guard let value = record["status"] as? String,
+                let status = Status(rawValue: value) else {
+                return .Open
+            }
+
+            return status
+        }
+
+        set {
+            record["status"] = newValue.rawValue
+        }
     }
 }

@@ -5,17 +5,13 @@
 //  Created by Ben Chatelain on 9/16/20.
 //
 
-import CombineCloudKit
-import Combine
 import SwiftUI
 
 struct AddTaskView: View {
-    @Environment(\.database) var database: Database
+    @EnvironmentObject var database: DatabaseViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     @State private var enteredText: String = ""
-
-    private var cancellable: AnyCancellable?
 
     var body: some View {
         Form {
@@ -31,19 +27,12 @@ struct AddTaskView: View {
             return
         }
 
-        _Concurrency.Task.detached {
-            // Create a new Task with the text that the user entered.
-            let task = Task(name: enteredText).record
-            do {
-                try await database.save(task)
-                DispatchQueue.main.async {
-                    presentationMode.wrappedValue.dismiss()
-                }
-            } catch {
-                // TODO: Handle failure
-                print("Failed: \(error)")
-            }
-        }
+        // Create a new Task with the text that the user entered.
+        let task = Task(name: enteredText)
+
+        // FIXME: Assumes success.
+        database.save(task)
+        presentationMode.wrappedValue.dismiss()
     }
 }
 

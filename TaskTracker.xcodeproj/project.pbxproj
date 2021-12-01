@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B5CAD10D26C2135200A4102E /* MockDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10C26C2135200A4102E /* MockDatabase.swift */; };
+		B5CAD10D26C2135200A4102E /* MockDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10C26C2135200A4102E /* MockDatabaseService.swift */; };
 		B5CAD10F26C21BD900A4102E /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10E26C21BD900A4102E /* TasksView.swift */; };
+		C52F9E3C27573AE20016AD7B /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52F9E3B27573AE20016AD7B /* DatabaseService.swift */; };
 		C591F17C26DD62C60021B3CF /* CombineCloudKit in Frameworks */ = {isa = PBXBuildFile; productRef = C591F17B26DD62C60021B3CF /* CombineCloudKit */; };
 		C5B5348526DEF8500017BE02 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B5348426DEF8500017BE02 /* CloudKit.framework */; };
-		C5B5348726DF2C180017BE02 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B5348626DF2C180017BE02 /* Database.swift */; };
+		C5B5348726DF2C180017BE02 /* DatabaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B5348626DF2C180017BE02 /* DatabaseViewModel.swift */; };
 		F8BC89AB251F9CC300566416 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC89AA251F9CC300566416 /* Task.swift */; };
 		F8E140CC2511935F003B4289 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E140CB2511935F003B4289 /* App.swift */; };
 		F8E140D025119360003B4289 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8E140CF25119360003B4289 /* Assets.xcassets */; };
@@ -40,11 +41,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B5CAD10C26C2135200A4102E /* MockDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDatabase.swift; sourceTree = "<group>"; };
+		B5CAD10C26C2135200A4102E /* MockDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDatabaseService.swift; sourceTree = "<group>"; };
 		B5CAD10E26C21BD900A4102E /* TasksView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
 		C516F2E426DD66E900CEB590 /* TaskTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskTracker.entitlements; sourceTree = "<group>"; };
+		C52F9E3B27573AE20016AD7B /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		C5B5348426DEF8500017BE02 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		C5B5348626DF2C180017BE02 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		C5B5348626DF2C180017BE02 /* DatabaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseViewModel.swift; sourceTree = "<group>"; };
 		F8BC89AA251F9CC300566416 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		F8E140C82511935F003B4289 /* ✅ Tasks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "✅ Tasks.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8E140CB2511935F003B4289 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
@@ -91,9 +93,17 @@
 		C50581652727B80500D7FEB6 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				C5B5348626DF2C180017BE02 /* Database.swift */,
+				C5B5348626DF2C180017BE02 /* DatabaseViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C52F9E3A27573AC90016AD7B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C52F9E3B27573AE20016AD7B /* DatabaseService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		C5B5348326DEF8500017BE02 /* Frameworks */ = {
@@ -142,6 +152,7 @@
 				F8E140CB2511935F003B4289 /* App.swift */,
 				F8BC899C251F9C9A00566416 /* Models */,
 				F8E140D125119360003B4289 /* Preview Content */,
+				C52F9E3A27573AC90016AD7B /* Services */,
 				F8E141562511A64A003B4289 /* Views */,
 				C50581652727B80500D7FEB6 /* ViewModels */,
 			);
@@ -151,7 +162,7 @@
 		F8E140D125119360003B4289 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				B5CAD10C26C2135200A4102E /* MockDatabase.swift */,
+				B5CAD10C26C2135200A4102E /* MockDatabaseService.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -324,9 +335,10 @@
 				F8E1416B2511C537003B4289 /* ListView.swift in Sources */,
 				F8BC89AB251F9CC300566416 /* Task.swift in Sources */,
 				B5CAD10F26C21BD900A4102E /* TasksView.swift in Sources */,
-				B5CAD10D26C2135200A4102E /* MockDatabase.swift in Sources */,
+				B5CAD10D26C2135200A4102E /* MockDatabaseService.swift in Sources */,
+				C52F9E3C27573AE20016AD7B /* DatabaseService.swift in Sources */,
 				F8E1419C2512BFC3003B4289 /* AddTaskView.swift in Sources */,
-				C5B5348726DF2C180017BE02 /* Database.swift in Sources */,
+				C5B5348726DF2C180017BE02 /* DatabaseViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

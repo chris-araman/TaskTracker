@@ -5,19 +5,12 @@
 //  Created by Ben Chatelain on 9/15/20.
 //
 
-import CombineCloudKit
 import SwiftUI
 
 /// Screen containing a list of tasks. Implements functionality for adding, rearranging, and deleting tasks.
 struct ListView: View {
-    @Environment(\.database) var database: Database
+    @EnvironmentObject var database: DatabaseViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
-    /// All of the user's tasks.
-    private var tasks : [Task] {
-        get { database.tasks }
-    }
-    // FIXME: database.fetch("Task").map(Task.init(from:))
 
     @State private var showingActionSheet = false
 
@@ -27,7 +20,7 @@ struct ListView: View {
 
     var body: some View {
         List(selection: $selection) {
-            ForEach(tasks) { task in
+            ForEach(database.tasks) { task in
                 TaskRow(task: task)
                     .onTapGesture {
                         showingActionSheet = true
@@ -36,16 +29,9 @@ struct ListView: View {
             }
             .onDelete { indices in
                 let toDelete = indices.map { index in
-                    tasks[index].record.recordID
+                    database.tasks[index]
                 }
-                _Concurrency.Task.detached {
-                    do {
-                        try await database.delete(toDelete)
-                    } catch {
-                        // TODO: Handle failure
-                        print("Failed: \(error)")
-                    }
-                }
+                database.delete(toDelete)
             }
 //            .onMove(perform: tasks.move)
         }
@@ -62,7 +48,7 @@ struct ListView: View {
     }
 
     var editTask: Task? {
-        tasks.first { task in task.id == selection }
+        database.tasks.first { task in task.id == selection }
     }
 
     /// Builds an action sheet to toggle the selected task's status.
@@ -102,15 +88,8 @@ struct ListView: View {
         }
 
         editTask.status = newStatus
-        let record = editTask.record
-        _Concurrency.Task.detached {
-            do {
-                try await database.save(record)
-            } catch {
-                // TODO: Handle failure
-            }
-        }
-    }
+        database.save(editTask)
+   }
 
 }
 
@@ -118,6 +97,6 @@ struct ListView_Previews: PreviewProvider {
     static var previews: some View {
         ListView()
             .navigationBarTitle("Tasks")
-            .database(MockDatabase())
+            .database(DatabaseViewModel(database: MockDatabaseService()))
     }
 }

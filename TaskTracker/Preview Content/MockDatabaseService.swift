@@ -6,15 +6,14 @@
 //
 
 import CloudKit
-import CombineCloudKit
 
-class MockDatabase: Database {
-    var accountStatus: CKAccountStatus {
-        get { .available }
+class MockDatabaseService: DatabaseService {
+    func accountStatus() async throws -> CKAccountStatus {
+        .available
     }
 
-    var tasks: [Task] {
-        get { [Task(name: "Foo"), Task(name: "Bar")] }
+    func fetchAll() async throws -> [Task] {
+        [Task(name: "Foo"), Task(name: "Bar")]
     }
 
     func save(_ task: CKRecord) async throws {

@@ -17,7 +17,7 @@ class DatabaseViewModel: ObservableObject {
   @Published var error: Error?
 
   private let database: DatabaseService
-  private var set = Set<Task>()
+  private var map = [Task.ID: Task]()
 
   init(database: DatabaseService = CloudKitDatabaseService()) {
     self.database = database
@@ -30,8 +30,10 @@ class DatabaseViewModel: ObservableObject {
     self.error = nil
     do {
       self.accountStatus = try await self.database.accountStatus()
-      self.set = Set(try await self.database.fetchAll())
-      self.tasks = set.sorted()
+      self.map = try await self.database.fetchAll().reduce(into: [Task.ID: Task]()) { map, task in
+        map[task.id] = task
+      }
+      self.tasks = map.values.sorted()
     } catch {
       self.error = error
     }
@@ -43,29 +45,25 @@ class DatabaseViewModel: ObservableObject {
     }
   }
 
-  private func addOrUpdate(_ tasks: [Task]) {
+  private func update(_ tasks: [Task]) {
     for task in tasks {
-      set.insert(task)
+      map.updateValue(task, forKey: task.id)
     }
 
-    withAnimation {
-      self.tasks = set.sorted()
-    }
+    self.tasks = map.values.sorted()
   }
 
   private func remove(_ tasks: [Task]) {
     for task in tasks {
-      set.remove(task)
+      map.removeValue(forKey: task.id)
     }
 
-    withAnimation {
-      self.tasks = set.sorted()
-    }
+    self.tasks = map.values.sorted()
   }
 
   func save(_ task: Task) async {
     error = nil
-    addOrUpdate([task])
+    update([task])
 
     do {
       try await database.save(task.record)
@@ -89,7 +87,7 @@ class DatabaseViewModel: ObservableObject {
       try await database.delete(tasks.map(\.record.recordID))
     } catch {
       self.error = error
-      addOrUpdate(tasks)
+      update(tasks)
     }
   }
 }

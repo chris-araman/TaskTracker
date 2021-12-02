@@ -7,7 +7,7 @@
 
 import CloudKit
 
-struct Task: Comparable, Hashable, Identifiable {
+struct Task: Comparable, Identifiable {
   enum Status: String, Comparable {
     case Open
     case InProgress

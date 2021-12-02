@@ -8,17 +8,17 @@
 import CloudKit
 
 class MockDatabaseService: DatabaseService {
-    func accountStatus() async throws -> CKAccountStatus {
-        .available
-    }
+  func accountStatus() async throws -> CKAccountStatus {
+    .available
+  }
 
-    func fetchAll() async throws -> [Task] {
-        [Task(name: "Foo"), Task(name: "Bar")]
-    }
+  func fetchAll() async throws -> [Task] {
+    [Task(name: "Foo"), Task(name: "Bar")]
+  }
 
-    func save(_ task: CKRecord) async throws {
-    }
+  func save(_ task: CKRecord) async throws {
+  }
 
-    func delete(_ tasks: [CKRecord.ID]) async throws {
-    }
+  func delete(_ tasks: [CKRecord.ID]) async throws {
+  }
 }

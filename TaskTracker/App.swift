@@ -9,10 +9,10 @@ import SwiftUI
 
 @main
 struct App: SwiftUI.App {
-    var body: some Scene {
-        WindowGroup {
-            TasksView()
-                .environmentObject(DatabaseViewModel())
-        }
+  var body: some Scene {
+    WindowGroup {
+      TasksView()
+        .environmentObject(DatabaseViewModel())
     }
+  }
 }

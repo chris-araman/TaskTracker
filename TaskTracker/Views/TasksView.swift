@@ -8,20 +8,20 @@
 import SwiftUI
 
 struct TasksView: View {
-    var body: some View {
-        NavigationView {
-            ListView()
-        }
-        .toolbar {
-            ToolbarItem {
-                NavigationLink("Add", destination: AddTaskView())
-            }
-        }
+  var body: some View {
+    NavigationView {
+      ListView()
     }
+    .toolbar {
+      ToolbarItem {
+        NavigationLink("Add", destination: AddTaskView())
+      }
+    }
+  }
 }
 
 struct TasksView_Previews: PreviewProvider {
-    static var previews: some View {
-        TasksView()
-    }
+  static var previews: some View {
+    TasksView()
+  }
 }

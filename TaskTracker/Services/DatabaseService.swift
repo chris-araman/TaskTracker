@@ -12,8 +12,8 @@ import CombineCloudKit
 protocol DatabaseService {
   func accountStatus() async throws -> CKAccountStatus
   func fetchAll() async throws -> [Task]
-  func save(_ task: CKRecord) async throws
-  func delete(_ tasks: [CKRecord.ID]) async throws
+  func save(_ task: Task) async throws
+  func delete(_ tasks: [Task.ID]) async throws
 }
 
 class CloudKitDatabaseService: DatabaseService {
@@ -62,9 +62,9 @@ class CloudKitDatabaseService: DatabaseService {
     }
   }
 
-  func save(_ task: CKRecord) async throws {
+  func save(_ task: Task) async throws {
     try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-      database.save(record: task)
+      database.save(record: task.record)
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
@@ -80,7 +80,7 @@ class CloudKitDatabaseService: DatabaseService {
     }
   }
 
-  func delete(_ tasks: [CKRecord.ID]) async throws {
+  func delete(_ tasks: [Task.ID]) async throws {
     try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
       database.delete(recordIDs: tasks)
         .sink(

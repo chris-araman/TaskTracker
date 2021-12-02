@@ -50,7 +50,7 @@ class DatabaseViewModel: ObservableObject {
     update([task])
 
     do {
-      try await database.save(task.record)
+      try await database.save(task)
     } catch {
       self.error = error
       remove([task])
@@ -68,7 +68,7 @@ class DatabaseViewModel: ObservableObject {
     remove(tasks)
 
     do {
-      try await database.delete(tasks.map(\.record.recordID))
+      try await database.delete(tasks.map(\.id))
     } catch {
       self.error = error
       update(tasks)

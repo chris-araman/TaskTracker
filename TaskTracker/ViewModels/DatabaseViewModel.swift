@@ -33,7 +33,7 @@ class DatabaseViewModel: ObservableObject {
       self.map = try await self.database.fetchAll().reduce(into: [Task.ID: Task]()) { map, task in
         map[task.id] = task
       }
-      self.tasks = map.values.sorted()
+      publish()
     } catch {
       self.error = error
     }
@@ -43,22 +43,6 @@ class DatabaseViewModel: ObservableObject {
     _Concurrency.Task.detached {
       await self.save(task)
     }
-  }
-
-  private func update(_ tasks: [Task]) {
-    for task in tasks {
-      map.updateValue(task, forKey: task.id)
-    }
-
-    self.tasks = map.values.sorted()
-  }
-
-  private func remove(_ tasks: [Task]) {
-    for task in tasks {
-      map.removeValue(forKey: task.id)
-    }
-
-    self.tasks = map.values.sorted()
   }
 
   func save(_ task: Task) async {
@@ -88,6 +72,28 @@ class DatabaseViewModel: ObservableObject {
     } catch {
       self.error = error
       update(tasks)
+    }
+  }
+
+  private func update(_ tasks: [Task]) {
+    for task in tasks {
+      map.updateValue(task, forKey: task.id)
+    }
+
+    publish()
+  }
+
+  private func remove(_ tasks: [Task]) {
+    for task in tasks {
+      map.removeValue(forKey: task.id)
+    }
+
+    publish()
+  }
+
+  private func publish() {
+    withAnimation() {
+      self.tasks = map.values.sorted()
     }
   }
 }

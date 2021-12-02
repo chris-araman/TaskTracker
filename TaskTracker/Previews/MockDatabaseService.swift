@@ -8,7 +8,7 @@
 import CloudKit
 
 class MockDatabaseService: DatabaseService {
-  func accountStatus() async throws -> CKAccountStatus {
+  func accountStatus() async -> CKAccountStatus {
     .available
   }
 

@@ -11,6 +11,7 @@
 		B5CAD10F26C21BD900A4102E /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10E26C21BD900A4102E /* TasksView.swift */; };
 		C52F9E3C27573AE20016AD7B /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52F9E3B27573AE20016AD7B /* DatabaseService.swift */; };
 		C5635DD027586D6400381BEC /* Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5635DCF27586D6400381BEC /* Previews.swift */; };
+		C5635DD227597DAF00381BEC /* Concurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5635DD127597DAF00381BEC /* Concurrency.swift */; };
 		C591F17C26DD62C60021B3CF /* CombineCloudKit in Frameworks */ = {isa = PBXBuildFile; productRef = C591F17B26DD62C60021B3CF /* CombineCloudKit */; };
 		C5B5348526DEF8500017BE02 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B5348426DEF8500017BE02 /* CloudKit.framework */; };
 		C5B5348726DF2C180017BE02 /* DatabaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B5348626DF2C180017BE02 /* DatabaseViewModel.swift */; };
@@ -46,6 +47,7 @@
 		C516F2E426DD66E900CEB590 /* TaskTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskTracker.entitlements; sourceTree = "<group>"; };
 		C52F9E3B27573AE20016AD7B /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		C5635DCF27586D6400381BEC /* Previews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Previews.swift; sourceTree = "<group>"; };
+		C5635DD127597DAF00381BEC /* Concurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concurrency.swift; sourceTree = "<group>"; };
 		C5B5348426DEF8500017BE02 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		C5B5348626DF2C180017BE02 /* DatabaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseViewModel.swift; sourceTree = "<group>"; };
 		F8BC89AA251F9CC300566416 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				F8E140CF25119360003B4289 /* Assets.xcassets */,
 				F8E140D425119360003B4289 /* Info.plist */,
 				F8E140CB2511935F003B4289 /* App.swift */,
+				C5635DD127597DAF00381BEC /* Concurrency.swift */,
 				F8BC899C251F9C9A00566416 /* Models */,
 				F8E140D125119360003B4289 /* Previews */,
 				C52F9E3A27573AC90016AD7B /* Services */,
@@ -337,6 +340,7 @@
 				C5635DD027586D6400381BEC /* Previews.swift in Sources */,
 				B5CAD10D26C2135200A4102E /* MockDatabaseService.swift in Sources */,
 				C52F9E3C27573AE20016AD7B /* DatabaseService.swift in Sources */,
+				C5635DD227597DAF00381BEC /* Concurrency.swift in Sources */,
 				F8E1419C2512BFC3003B4289 /* AddTaskView.swift in Sources */,
 				C5B5348726DF2C180017BE02 /* DatabaseViewModel.swift in Sources */,
 			);

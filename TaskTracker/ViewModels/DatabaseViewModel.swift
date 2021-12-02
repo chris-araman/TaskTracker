@@ -28,8 +28,8 @@ class DatabaseViewModel: ObservableObject {
 
   func refresh() async {
     self.error = nil
+    self.accountStatus = await self.database.accountStatus()
     do {
-      self.accountStatus = try await self.database.accountStatus()
       self.map = try await self.database.fetchAll().reduce(into: [Task.ID: Task]()) { map, task in
         map[task.id] = task
       }
@@ -92,7 +92,7 @@ class DatabaseViewModel: ObservableObject {
   }
 
   private func publish() {
-    withAnimation() {
+    withAnimation {
       self.tasks = map.values.sorted()
     }
   }

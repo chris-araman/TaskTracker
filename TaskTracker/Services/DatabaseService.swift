@@ -10,7 +10,7 @@ import Combine
 import CombineCloudKit
 
 protocol DatabaseService {
-  func accountStatus() async throws -> CKAccountStatus
+  func accountStatus() async -> CKAccountStatus
   func fetchAll() async throws -> [Task]
   func save(_ task: Task) async throws
   func delete(_ tasks: [Task.ID]) async throws
@@ -18,17 +18,12 @@ protocol DatabaseService {
 
 class CloudKitDatabaseService: DatabaseService {
   private let container = CKContainer.default()
-
-  // TODO: Does this grow indefinitely?
-  private var cancellables = Set<AnyCancellable>()
-
   private var database: CCKDatabase {
     container.privateCloudDatabase
   }
 
-  func accountStatus() async throws -> CKAccountStatus {
-    try await withCheckedThrowingContinuation {
-      (continuation: CheckedContinuation<CKAccountStatus, Error>) in
+  func accountStatus() async -> CKAccountStatus {
+    await withCancellableContinuation { continuation in
       container.accountStatus()
         .catch { _ in
           Just(.couldNotDetermine)
@@ -36,13 +31,11 @@ class CloudKitDatabaseService: DatabaseService {
         .sink { status in
           continuation.resume(returning: status)
         }
-        .store(in: &cancellables)
     }
   }
 
   func fetchAll() async throws -> [Task] {
-    try await withCheckedThrowingContinuation {
-      (continuation: CheckedContinuation<[Task], Error>) in
+    try await withCancellableThrowingContinuation { continuation in
       database.performQuery(ofType: "Task")
         .map { record in
           Task(from: record)
@@ -58,12 +51,11 @@ class CloudKitDatabaseService: DatabaseService {
             continuation.resume(returning: tasks)
           }
         )
-        .store(in: &cancellables)
     }
   }
 
   func save(_ task: Task) async throws {
-    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+    try await withCancellableThrowingContinuation { continuation in
       database.save(record: task.record)
         .sink(
           receiveCompletion: { completion in
@@ -76,12 +68,11 @@ class CloudKitDatabaseService: DatabaseService {
           },
           receiveValue: { _ in }
         )
-        .store(in: &cancellables)
     }
   }
 
   func delete(_ tasks: [Task.ID]) async throws {
-    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+    try await withCancellableThrowingContinuation { continuation in
       database.delete(recordIDs: tasks)
         .sink(
           receiveCompletion: { completion in
@@ -94,7 +85,6 @@ class CloudKitDatabaseService: DatabaseService {
           },
           receiveValue: { _ in }
         )
-        .store(in: &cancellables)
     }
   }
 }

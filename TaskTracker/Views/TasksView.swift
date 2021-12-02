@@ -8,13 +8,29 @@
 import SwiftUI
 
 struct TasksView: View {
+  @EnvironmentObject var database: DatabaseViewModel
+
   var body: some View {
     NavigationView {
-      ListView()
-    }
-    .toolbar {
-      ToolbarItem {
-        NavigationLink("Add", destination: AddTaskView())
+      List {
+        ForEach(database.tasks) { task in
+          TaskRow(task: task)
+        }
+        .onDelete { indices in
+          let toDelete = indices.map { index in
+            database.tasks[index]
+          }
+          database.delete(toDelete)
+        }
+      }
+      .refreshable {
+        await database.refresh()
+      }
+      .navigationBarTitle("Tasks")
+      .toolbar {
+        NavigationLink(destination: AddTaskView()) {
+          Image(systemName: "plus")
+        }
       }
     }
   }
@@ -23,5 +39,7 @@ struct TasksView: View {
 struct TasksView_Previews: PreviewProvider {
   static var previews: some View {
     TasksView()
+      .environmentObject(
+        DatabaseViewModel(database: MockDatabaseService()))
   }
 }

@@ -18,7 +18,6 @@
 		F8E140D025119360003B4289 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8E140CF25119360003B4289 /* Assets.xcassets */; };
 		F8E140DE25119361003B4289 /* TaskTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E140DD25119361003B4289 /* TaskTrackerTests.swift */; };
 		F8E140E925119361003B4289 /* TaskTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E140E825119361003B4289 /* TaskTrackerUITests.swift */; };
-		F8E1416B2511C537003B4289 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E1416A2511C537003B4289 /* ListView.swift */; };
 		F8E1419C2512BFC3003B4289 /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E1419B2512BFC3003B4289 /* AddTaskView.swift */; };
 		F8E141A7251312CC003B4289 /* TaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E141A6251312CC003B4289 /* TaskRow.swift */; };
 /* End PBXBuildFile section */
@@ -58,7 +57,6 @@
 		F8E140E425119361003B4289 /* TaskTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8E140E825119361003B4289 /* TaskTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTrackerUITests.swift; sourceTree = "<group>"; };
 		F8E140EA25119361003B4289 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F8E1416A2511C537003B4289 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		F8E1419B2512BFC3003B4289 /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 		F8E141A6251312CC003B4289 /* TaskRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -190,7 +188,6 @@
 			children = (
 				F8E1419B2512BFC3003B4289 /* AddTaskView.swift */,
 				B5CAD10E26C21BD900A4102E /* TasksView.swift */,
-				F8E1416A2511C537003B4289 /* ListView.swift */,
 				F8E141A6251312CC003B4289 /* TaskRow.swift */,
 			);
 			path = Views;
@@ -332,7 +329,6 @@
 			files = (
 				F8E140CC2511935F003B4289 /* App.swift in Sources */,
 				F8E141A7251312CC003B4289 /* TaskRow.swift in Sources */,
-				F8E1416B2511C537003B4289 /* ListView.swift in Sources */,
 				F8BC89AB251F9CC300566416 /* Task.swift in Sources */,
 				B5CAD10F26C21BD900A4102E /* TasksView.swift in Sources */,
 				B5CAD10D26C2135200A4102E /* MockDatabaseService.swift in Sources */,

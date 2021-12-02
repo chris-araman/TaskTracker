@@ -10,24 +10,27 @@ import SwiftUI
 struct AddTaskView: View {
     @EnvironmentObject var database: DatabaseViewModel
     @Environment(\.dismiss) var dismiss: DismissAction
-
-    @State private var enteredText: String = ""
+    @State private var name: String = ""
+    @FocusState var nameHasFocus: Bool
 
     var body: some View {
         Form {
-            TextField("Task Name", text: $enteredText)
+            TextField("Task Name", text: $name)
+                .focused($nameHasFocus)
             Button("Save", action: add)
-                .disabled(enteredText.isEmpty)
+                .disabled(name.isEmpty)
         }
         .navigationBarTitle("Add Task")
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                nameHasFocus = true
+            }
+        }
     }
 
     func add() {
-        // Create a new Task with the text that the user entered.
-        let task = Task(name: enteredText)
-
         // FIXME: Assumes success.
-        database.save(task)
+        database.save(Task(name: name))
         dismiss()
     }
 }

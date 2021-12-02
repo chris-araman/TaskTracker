@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddTaskView: View {
     @EnvironmentObject var database: DatabaseViewModel
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) var dismiss: DismissAction
 
     @State private var enteredText: String = ""
 
@@ -17,22 +17,18 @@ struct AddTaskView: View {
         Form {
             TextField("Task Name", text: $enteredText)
             Button("Save", action: add)
+                .disabled(enteredText.isEmpty)
         }
         .navigationBarTitle("Add Task")
     }
 
     func add() {
-        guard enteredText != "" else {
-            print("Empty task, ignoring")
-            return
-        }
-
         // Create a new Task with the text that the user entered.
         let task = Task(name: enteredText)
 
         // FIXME: Assumes success.
         database.save(task)
-        presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 }
 

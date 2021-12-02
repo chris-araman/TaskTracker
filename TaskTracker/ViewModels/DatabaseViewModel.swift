@@ -8,12 +8,6 @@
 import CloudKit
 import SwiftUI
 
-extension View {
-    func database(_ database: DatabaseViewModel) -> some View {
-        environmentObject(database)
-    }
-}
-
 @MainActor
 class DatabaseViewModel: ObservableObject {
     @Published var accountStatus = CKAccountStatus.couldNotDetermine
@@ -23,6 +17,7 @@ class DatabaseViewModel: ObservableObject {
     @Published var error: Error?
 
     private let database: DatabaseService
+    private var set = Set<Task>()
 
     init(database: DatabaseService = CloudKitDatabaseService()) {
         self.database = database
@@ -35,7 +30,8 @@ class DatabaseViewModel: ObservableObject {
         self.error = nil
         do {
             self.accountStatus = try await self.database.accountStatus()
-            self.tasks = try await self.database.fetchAll()
+            self.set = Set(try await self.database.fetchAll())
+            self.tasks = set.sorted()
         }
         catch {
             self.error = error
@@ -48,14 +44,36 @@ class DatabaseViewModel: ObservableObject {
         }
     }
 
+    private func addOrUpdate(_ tasks: [Task]) {
+        for task in tasks {
+            set.insert(task)
+        }
+
+        withAnimation {
+            self.tasks = set.sorted()
+        }
+    }
+
+    private func remove(_ tasks: [Task]) {
+        for task in tasks {
+            set.remove(task)
+        }
+
+        withAnimation {
+            self.tasks = set.sorted()
+        }
+    }
+
     func save(_ task: Task) async {
-        self.error = nil
-        self.tasks.append(task)
+        error = nil
+        addOrUpdate([task])
+
         do {
-            try await self.database.save(task.record)
+            try await database.save(task.record)
         }
         catch {
             self.error = error
+            remove([task])
         }
     }
 
@@ -66,13 +84,15 @@ class DatabaseViewModel: ObservableObject {
     }
 
     func delete(_ tasks: [Task]) async {
-        self.error = nil
-        self.tasks.removeAll { record in tasks.contains(record) }
+        error = nil
+        remove(tasks)
+
         do {
-            try await self.database.delete(tasks.map(\.record.recordID))
+            try await database.delete(tasks.map(\.record.recordID))
         }
         catch {
             self.error = error
+            addOrUpdate(tasks)
         }
     }
 }

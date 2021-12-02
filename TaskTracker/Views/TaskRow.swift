@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TaskRow: View {
+    @EnvironmentObject var database: DatabaseViewModel
     @State var task: Task
 
     var body: some View {
@@ -17,15 +18,32 @@ struct TaskRow: View {
             Spacer()
 
             switch task.status {
+            case .Open:
+                EmptyView()
             case .InProgress:
                 Text("In Progress")
             case .Complete:
                 Text("✅")
-            default:
-                EmptyView()
             }
         }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            cycleTaskStatus()
+        }
     }
+
+    func cycleTaskStatus() {
+        switch task.status {
+        case .Open:
+            task.status = .InProgress
+        case .InProgress:
+            task.status = .Complete
+        case .Complete:
+            task.status = .Open
+        }
+
+        database.save(task)
+   }
 }
 
 struct TaskRow_Previews: PreviewProvider {

@@ -7,14 +7,33 @@
 
 import CloudKit
 
-struct Task: Hashable, Identifiable {
-    enum Status: String {
+struct Task: Comparable, Hashable, Identifiable {
+    enum Status: String, Comparable {
         case Open
         case InProgress
         case Complete
+
+        static func < (lhs: Task.Status, rhs: Task.Status) -> Bool {
+            switch lhs {
+            case Open:
+                return rhs == InProgress || rhs == Complete
+            case InProgress:
+                return rhs == Complete
+            case Complete:
+                return false
+            }
+        }
     }
 
     let record: CKRecord
+
+    static func < (lhs: Task, rhs: Task) -> Bool {
+        if lhs.status != rhs.status {
+            return lhs.status < rhs.status
+        }
+
+        return lhs.name.localizedCompare(rhs.name) == .orderedAscending
+    }
 
     init() {
         self.init(from: CKRecord(recordType: "Task"))

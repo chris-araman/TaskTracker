@@ -12,7 +12,7 @@ struct App: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
             TasksView()
-                .database(DatabaseViewModel())
+                .environmentObject(DatabaseViewModel())
         }
     }
 }

@@ -10,6 +10,7 @@
 		B5CAD10D26C2135200A4102E /* MockDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10C26C2135200A4102E /* MockDatabaseService.swift */; };
 		B5CAD10F26C21BD900A4102E /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CAD10E26C21BD900A4102E /* TasksView.swift */; };
 		C52F9E3C27573AE20016AD7B /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52F9E3B27573AE20016AD7B /* DatabaseService.swift */; };
+		C5635DD027586D6400381BEC /* Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5635DCF27586D6400381BEC /* Previews.swift */; };
 		C591F17C26DD62C60021B3CF /* CombineCloudKit in Frameworks */ = {isa = PBXBuildFile; productRef = C591F17B26DD62C60021B3CF /* CombineCloudKit */; };
 		C5B5348526DEF8500017BE02 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B5348426DEF8500017BE02 /* CloudKit.framework */; };
 		C5B5348726DF2C180017BE02 /* DatabaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B5348626DF2C180017BE02 /* DatabaseViewModel.swift */; };
@@ -44,6 +45,7 @@
 		B5CAD10E26C21BD900A4102E /* TasksView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
 		C516F2E426DD66E900CEB590 /* TaskTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskTracker.entitlements; sourceTree = "<group>"; };
 		C52F9E3B27573AE20016AD7B /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
+		C5635DCF27586D6400381BEC /* Previews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Previews.swift; sourceTree = "<group>"; };
 		C5B5348426DEF8500017BE02 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		C5B5348626DF2C180017BE02 /* DatabaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseViewModel.swift; sourceTree = "<group>"; };
 		F8BC89AA251F9CC300566416 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -149,7 +151,7 @@
 				F8E140D425119360003B4289 /* Info.plist */,
 				F8E140CB2511935F003B4289 /* App.swift */,
 				F8BC899C251F9C9A00566416 /* Models */,
-				F8E140D125119360003B4289 /* Preview Content */,
+				F8E140D125119360003B4289 /* Previews */,
 				C52F9E3A27573AC90016AD7B /* Services */,
 				F8E141562511A64A003B4289 /* Views */,
 				C50581652727B80500D7FEB6 /* ViewModels */,
@@ -157,12 +159,13 @@
 			path = TaskTracker;
 			sourceTree = "<group>";
 		};
-		F8E140D125119360003B4289 /* Preview Content */ = {
+		F8E140D125119360003B4289 /* Previews */ = {
 			isa = PBXGroup;
 			children = (
 				B5CAD10C26C2135200A4102E /* MockDatabaseService.swift */,
+				C5635DCF27586D6400381BEC /* Previews.swift */,
 			);
-			path = "Preview Content";
+			path = Previews;
 			sourceTree = "<group>";
 		};
 		F8E140DC25119361003B4289 /* TaskTrackerTests */ = {
@@ -331,6 +334,7 @@
 				F8E141A7251312CC003B4289 /* TaskRow.swift in Sources */,
 				F8BC89AB251F9CC300566416 /* Task.swift in Sources */,
 				B5CAD10F26C21BD900A4102E /* TasksView.swift in Sources */,
+				C5635DD027586D6400381BEC /* Previews.swift in Sources */,
 				B5CAD10D26C2135200A4102E /* MockDatabaseService.swift in Sources */,
 				C52F9E3C27573AE20016AD7B /* DatabaseService.swift in Sources */,
 				F8E1419C2512BFC3003B4289 /* AddTaskView.swift in Sources */,
@@ -494,7 +498,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TaskTracker/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"TaskTracker/Previews\"";
 				DEVELOPMENT_TEAM = 8G8C7E8465;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
@@ -526,7 +530,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TaskTracker/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"TaskTracker/Previews\"";
 				DEVELOPMENT_TEAM = 8G8C7E8465;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;

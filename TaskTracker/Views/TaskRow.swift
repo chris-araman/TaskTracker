@@ -45,9 +45,3 @@ struct TaskRow: View {
     database.save(task)
   }
 }
-
-struct TaskRow_Previews: PreviewProvider {
-  static var previews: some View {
-    TaskRow(task: Task(name: "☑️ Some Task"))
-  }
-}

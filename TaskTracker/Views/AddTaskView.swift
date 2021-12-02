@@ -34,9 +34,3 @@ struct AddTaskView: View {
     dismiss()
   }
 }
-
-struct AddTaskView_Previews: PreviewProvider {
-  static var previews: some View {
-    AddTaskView()
-  }
-}

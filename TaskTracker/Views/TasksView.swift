@@ -23,9 +23,12 @@ struct TasksView: View {
           database.delete(toDelete)
         }
       }
+#if !targetEnvironment(macCatalyst)
+      // TODO: Add a Refresh menu item bound to ⌘-R for macOS
       .refreshable {
         await database.refresh()
       }
+#endif
       .navigationBarTitle("Tasks")
       .toolbar {
         NavigationLink(destination: AddTaskView()) {

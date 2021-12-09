@@ -20,12 +20,13 @@ protocol DatabaseService: Actor {
 }
 
 actor CloudKitDatabaseService: DatabaseService {
+  static let zoneID = CKRecordZone.ID(zoneName: "Tasks")
+  var tasks = [Task.ID: Task]()
+
   private let container = CKContainer.default()
   private let database: CKDatabase
-  private var zone = CKRecordZone(zoneName: "Tasks")
   private let subscriptionID = "task-changes"
   private var changeToken: CKServerChangeToken?
-  var tasks = [Task.ID: Task]()
 
   init() {
     database = container.privateCloudDatabase
@@ -65,6 +66,7 @@ actor CloudKitDatabaseService: DatabaseService {
   }
 
   private func ensureRecordZone() async throws {
+    var zone: CKRecordZone
     do {
       zone = try await fetchRecordZone()
     } catch {
@@ -77,7 +79,7 @@ actor CloudKitDatabaseService: DatabaseService {
   private func fetchRecordZone() async throws -> CKRecordZone {
     return try await withCancellableThrowingContinuation { continuation in
       database
-        .fetch(recordZoneID: zone.zoneID)
+        .fetch(recordZoneID: CloudKitDatabaseService.zoneID)
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
@@ -94,7 +96,7 @@ actor CloudKitDatabaseService: DatabaseService {
   private func saveRecordZone() async throws -> CKRecordZone {
     return try await withCancellableThrowingContinuation { continuation in
       database
-        .save(recordZone: zone)
+        .save(recordZone: CKRecordZone(zoneID: CloudKitDatabaseService.zoneID))
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
@@ -135,7 +137,8 @@ actor CloudKitDatabaseService: DatabaseService {
   }
 
   private func saveSubscription() async throws {
-    let subscription = CKRecordZoneSubscription(zoneID: zone.zoneID, subscriptionID: subscriptionID)
+    let subscription = CKRecordZoneSubscription(
+      zoneID: CloudKitDatabaseService.zoneID, subscriptionID: subscriptionID)
     subscription.recordType = "Task"
     subscription.notificationInfo = CKSubscription.NotificationInfo(
       shouldSendContentAvailable: true)
@@ -191,7 +194,7 @@ actor CloudKitDatabaseService: DatabaseService {
         as? CKRecordZoneNotification,
       notification.subscriptionID == subscriptionID,
       notification.databaseScope == .private,
-      notification.recordZoneID == zone.zoneID
+      notification.recordZoneID == CloudKitDatabaseService.zoneID
     else {
       return false
     }
@@ -199,8 +202,8 @@ actor CloudKitDatabaseService: DatabaseService {
     let config = CKFetchRecordZoneChangesOperation.ZoneConfiguration()
     config.previousServerChangeToken = changeToken
     let operation = CKFetchRecordZoneChangesOperation(
-      recordZoneIDs: [zone.zoneID],
-      configurationsByRecordZoneID: [zone.zoneID: config])
+      recordZoneIDs: [CloudKitDatabaseService.zoneID],
+      configurationsByRecordZoneID: [CloudKitDatabaseService.zoneID: config])
     operation.recordWasChangedBlock = { recordID, result in
       guard case .success(let record) = result else {
         return
@@ -212,7 +215,7 @@ actor CloudKitDatabaseService: DatabaseService {
       self.tasks.removeValue(forKey: recordID)
     }
     operation.recordZoneChangeTokensUpdatedBlock = { recordZoneID, token, _ in
-      precondition(recordZoneID == self.zone.zoneID)
+      precondition(recordZoneID == CloudKitDatabaseService.zoneID)
       self.changeToken = token
     }
     operation.recordZoneFetchResultBlock = { recordZoneID, result in
@@ -220,7 +223,7 @@ actor CloudKitDatabaseService: DatabaseService {
         return
       }
 
-      precondition(recordZoneID == self.zone.zoneID)
+      precondition(recordZoneID == CloudKitDatabaseService.zoneID)
       self.changeToken = token
     }
 
@@ -241,7 +244,6 @@ actor CloudKitDatabaseService: DatabaseService {
   }
 
   func save(_ task: Task) async throws {
-    // TODO: Store round-tripped recordID with zone.zoneID
     try await withCancellableThrowingContinuation { continuation in
       database
         .save(record: task.record)

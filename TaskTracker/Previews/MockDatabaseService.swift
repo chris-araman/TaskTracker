@@ -7,13 +7,22 @@
 
 import CloudKit
 
-class MockDatabaseService: DatabaseService {
-  func accountStatus() async -> CKAccountStatus {
-    .available
+actor MockDatabaseService: DatabaseService {
+  var tasks: [Task.ID: Task] {
+    get {
+      let task = Task(name: "Foo")
+      return [task.id: task]
+    }
   }
 
-  func fetchAll() async throws -> [Task] {
-    [Task(name: "Foo"), Task(name: "Bar")]
+  func ready() async -> Bool {
+    true
+  }
+
+  func fetchAll() async {
+  }
+
+  func fetchChanges() async {
   }
 
   func save(_ task: Task) async throws {

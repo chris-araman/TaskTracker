@@ -72,89 +72,58 @@ actor CloudKitDatabaseService: DatabaseService {
   }
 
   private func ensureRecordZone() async throws {
-    var zone: CKRecordZone
-    do {
-      zone = try await fetchRecordZone()
-    } catch {
-      zone = try await saveRecordZone()
+    let zone = try await withCancellableThrowingContinuation { continuation in
+      database
+        .fetch(recordZoneID: CloudKitDatabaseService.zoneID)
+        .catch { error -> AnyPublisher<CKRecordZone, Error> in
+          // If a zone could not be fetched, save one.
+          guard let error = error as? CKError,
+            let partial = error.partialErrorsByItemID?[CloudKitDatabaseService.zoneID] as? CKError,
+            partial.code == .unknownItem
+          else {
+            return Fail(error: error).eraseToAnyPublisher()
+          }
+
+          let zone = CKRecordZone(zoneID: CloudKitDatabaseService.zoneID)
+          return self.database.save(recordZone: zone)
+        }
+        .sink(
+          receiveCompletion: { completion in
+            if case .failure(let error) = completion {
+              debugPrint(error)
+              continuation.resume(throwing: error)
+            }
+          },
+          receiveValue: { zone in
+            continuation.resume(returning: zone)
+          }
+        )
     }
 
     precondition(zone.capabilities.contains(.fetchChanges))
     precondition(CloudKitDatabaseService.zoneID == zone.zoneID)
   }
 
-  private func fetchRecordZone() async throws -> CKRecordZone {
-    return try await withCancellableThrowingContinuation { continuation in
-      database
-        .fetch(recordZoneID: CloudKitDatabaseService.zoneID)
-        .sink(
-          receiveCompletion: { completion in
-            if case .failure(let error) = completion {
-              debugPrint(error)
-              continuation.resume(throwing: error)
-            }
-          },
-          receiveValue: { zone in
-            continuation.resume(returning: zone)
-          }
-        )
-    }
-  }
-
-  private func saveRecordZone() async throws -> CKRecordZone {
-    return try await withCancellableThrowingContinuation { continuation in
-      database
-        .save(recordZone: CKRecordZone(zoneID: CloudKitDatabaseService.zoneID))
-        .sink(
-          receiveCompletion: { completion in
-            if case .failure(let error) = completion {
-              debugPrint(error)
-              continuation.resume(throwing: error)
-            }
-          },
-          receiveValue: { zone in
-            continuation.resume(returning: zone)
-          }
-        )
-    }
-  }
-
   private func ensureSubscription() async throws {
-    do {
-      try await fetchSubscription()
-    } catch {
-      try await saveSubscription()
-    }
-  }
-
-  private func fetchSubscription() async throws {
     try await withCancellableThrowingContinuation { continuation in
       database
         .fetch(subscriptionID: subscriptionID)
-        .sink(
-          receiveCompletion: { completion in
-            if case .failure(let error) = completion {
-              debugPrint(error)
-              continuation.resume(throwing: error)
-              return
-            }
+        .catch { error -> AnyPublisher<CKSubscription, Error> in
+          // If a subscription could not be fetched, save one.
+          guard let error = error as? CKError,
+            let partial = error.partialErrorsByItemID?[self.subscriptionID] as? CKError,
+            partial.code == .unknownItem
+          else {
+            return Fail(error: error).eraseToAnyPublisher()
+          }
 
-            continuation.resume()
-          },
-          receiveValue: { _ in }
-        )
-    }
-  }
-
-  private func saveSubscription() async throws {
-    let subscription = CKRecordZoneSubscription(
-      zoneID: CloudKitDatabaseService.zoneID, subscriptionID: subscriptionID)
-    subscription.recordType = "Task"
-    subscription.notificationInfo =
-      CKSubscription.NotificationInfo(shouldSendContentAvailable: true)
-    try await withCancellableThrowingContinuation { continuation in
-      database
-        .save(subscription: subscription)
+          let subscription = CKRecordZoneSubscription(
+            zoneID: CloudKitDatabaseService.zoneID, subscriptionID: self.subscriptionID)
+          subscription.recordType = "Task"
+          subscription.notificationInfo =
+            CKSubscription.NotificationInfo(shouldSendContentAvailable: true)
+          return self.database.save(subscription: subscription).eraseToAnyPublisher()
+        }
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {

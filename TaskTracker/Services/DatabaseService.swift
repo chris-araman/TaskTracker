@@ -72,58 +72,9 @@ actor CloudKitDatabaseService: DatabaseService {
   }
 
   private func ensureRecordZone() async throws {
-    let zone = try await withCancellableThrowingContinuation { continuation in
-      database
-        .fetch(recordZoneID: CloudKitDatabaseService.zoneID)
-        .catch { error -> AnyPublisher<CKRecordZone, Error> in
-          // If a zone could not be fetched, save one.
-          guard let error = error as? CKError,
-            let partial = error.partialErrorsByItemID?[CloudKitDatabaseService.zoneID] as? CKError,
-            partial.code == .unknownItem
-          else {
-            return Fail(error: error).eraseToAnyPublisher()
-          }
-
-          let zone = CKRecordZone(zoneID: CloudKitDatabaseService.zoneID)
-          return self.database.save(recordZone: zone)
-        }
-        .sink(
-          receiveCompletion: { completion in
-            if case .failure(let error) = completion {
-              debugPrint(error)
-              continuation.resume(throwing: error)
-            }
-          },
-          receiveValue: { zone in
-            continuation.resume(returning: zone)
-          }
-        )
-    }
-
-    precondition(zone.capabilities.contains(.fetchChanges))
-    precondition(CloudKitDatabaseService.zoneID == zone.zoneID)
-  }
-
-  private func ensureSubscription() async throws {
     try await withCancellableThrowingContinuation { continuation in
       database
-        .fetch(subscriptionID: subscriptionID)
-        .catch { error -> AnyPublisher<CKSubscription, Error> in
-          // If a subscription could not be fetched, save one.
-          guard let error = error as? CKError,
-            let partial = error.partialErrorsByItemID?[self.subscriptionID] as? CKError,
-            partial.code == .unknownItem
-          else {
-            return Fail(error: error).eraseToAnyPublisher()
-          }
-
-          let subscription = CKRecordZoneSubscription(
-            zoneID: CloudKitDatabaseService.zoneID, subscriptionID: self.subscriptionID)
-          subscription.recordType = "Task"
-          subscription.notificationInfo =
-            CKSubscription.NotificationInfo(shouldSendContentAvailable: true)
-          return self.database.save(subscription: subscription).eraseToAnyPublisher()
-        }
+        .save(recordZone: CKRecordZone(zoneID: CloudKitDatabaseService.zoneID))
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
@@ -134,7 +85,35 @@ actor CloudKitDatabaseService: DatabaseService {
 
             continuation.resume()
           },
-          receiveValue: { _ in }
+          receiveValue: { zone in
+            precondition(zone.capabilities.contains(.fetchChanges))
+            precondition(CloudKitDatabaseService.zoneID == zone.zoneID)
+          }
+        )
+    }
+  }
+
+  private func ensureSubscription() async throws {
+    let subscription = CKRecordZoneSubscription(
+      zoneID: CloudKitDatabaseService.zoneID, subscriptionID: subscriptionID)
+    subscription.recordType = "Task"
+    subscription.notificationInfo =
+      CKSubscription.NotificationInfo(shouldSendContentAvailable: true)
+    try await withCancellableThrowingContinuation { continuation in
+      database.save(subscription: subscription)
+        .sink(
+          receiveCompletion: { completion in
+            if case .failure(let error) = completion {
+              debugPrint(error)
+              continuation.resume(throwing: error)
+              return
+            }
+
+            continuation.resume()
+          },
+          receiveValue: { subscription in
+            precondition(subscription.subscriptionID == self.subscriptionID)
+          }
         )
     }
   }
@@ -180,11 +159,9 @@ actor CloudKitDatabaseService: DatabaseService {
       return false
     }
 
-    let config = CKFetchRecordZoneChangesOperation.ZoneConfiguration()
-    config.previousServerChangeToken = changeToken
     let operation = CKFetchRecordZoneChangesOperation(
       recordZoneIDs: [CloudKitDatabaseService.zoneID],
-      configurationsByRecordZoneID: [CloudKitDatabaseService.zoneID: config])
+      configurationsByRecordZoneID: [CloudKitDatabaseService.zoneID: .init(previousServerChangeToken: changeToken)])
     operation.recordWasChangedBlock = { recordID, result in
       guard case .success(let record) = result else {
         return

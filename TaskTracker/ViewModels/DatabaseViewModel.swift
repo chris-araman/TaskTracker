@@ -20,9 +20,11 @@ class DatabaseViewModel: ObservableObject {
   init(database: DatabaseService) {
     self.database = database
     _Concurrency.Task.detached {
-      let ready = await self.database.ready()
-      if !ready {
-        // TODO: self.error =
+      await self.operate {
+        let ready = await self.database.ready()
+        if !ready {
+          // TODO: self.error =
+        }
       }
     }
   }

@@ -9,10 +9,8 @@ import CloudKit
 
 actor MockDatabaseService: DatabaseService {
   var tasks: [Task.ID: Task] {
-    get {
-      let task = Task(name: "Foo")
-      return [task.id: task]
-    }
+    let task = Task(name: "Foo")
+    return [task.id: task]
   }
 
   func ready() async -> Bool {
@@ -22,12 +20,13 @@ actor MockDatabaseService: DatabaseService {
   func fetchAll() async {
   }
 
-  func fetchChanges() async {
-  }
-
   func save(_ task: Task) async throws {
   }
 
   func delete(_ tasks: [Task.ID]) async throws {
+  }
+
+  func didReceiveRemoteNotification(_ userInfo: [AnyHashable: Any]) async throws -> Bool {
+    true
   }
 }

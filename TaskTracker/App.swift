@@ -12,14 +12,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
   func application(
     _ application: UIApplication,
-    didReceiveRemoteNotification userInfo: [AnyHashable : Any]
+    didReceiveRemoteNotification userInfo: [AnyHashable: Any]
   ) async -> UIBackgroundFetchResult {
     do {
-      try await database.fetchChanges()
-      return .newData
+      guard try await database.didReceiveRemoteNotification(userInfo) else {
+        return .noData
+      }
     } catch {
       return .failed
     }
+
+    return .newData
   }
 }
 

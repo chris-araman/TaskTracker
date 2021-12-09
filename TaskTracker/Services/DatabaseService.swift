@@ -14,9 +14,9 @@ protocol DatabaseService: Actor {
 
   func ready() async -> Bool
   func fetchAll() async throws
-  func fetchChanges() async throws
   func save(_ task: Task) async throws
   func delete(_ tasks: [Task.ID]) async throws
+  func didReceiveRemoteNotification(_ userInfo: [AnyHashable: Any]) async throws -> Bool
 }
 
 actor CloudKitDatabaseService: DatabaseService {
@@ -39,7 +39,7 @@ actor CloudKitDatabaseService: DatabaseService {
     do {
       try await ensureRecordZone()
       try await ensureSubscription()
-      try await fetchChanges()
+      try await fetchAll()
     } catch {
       return false
     }
@@ -137,7 +137,8 @@ actor CloudKitDatabaseService: DatabaseService {
   private func saveSubscription() async throws {
     let subscription = CKRecordZoneSubscription(zoneID: zone.zoneID, subscriptionID: subscriptionID)
     subscription.recordType = "Task"
-    subscription.notificationInfo = CKSubscription.NotificationInfo(shouldSendContentAvailable: true)
+    subscription.notificationInfo = CKSubscription.NotificationInfo(
+      shouldSendContentAvailable: true)
     try await withCancellableThrowingContinuation { continuation in
       database
         .save(subscription: subscription)
@@ -184,7 +185,17 @@ actor CloudKitDatabaseService: DatabaseService {
     }
   }
 
-  func fetchChanges() async throws {
+  func didReceiveRemoteNotification(_ userInfo: [AnyHashable: Any]) async throws -> Bool {
+    guard
+      let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
+        as? CKRecordZoneNotification,
+      notification.subscriptionID == subscriptionID,
+      notification.databaseScope == .private,
+      notification.recordZoneID == zone.zoneID
+    else {
+      return false
+    }
+
     let config = CKFetchRecordZoneChangesOperation.ZoneConfiguration()
     config.previousServerChangeToken = changeToken
     let operation = CKFetchRecordZoneChangesOperation(
@@ -225,6 +236,8 @@ actor CloudKitDatabaseService: DatabaseService {
 
       database.add(operation)
     }
+
+    return true
   }
 
   func save(_ task: Task) async throws {

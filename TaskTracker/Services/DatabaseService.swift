@@ -90,6 +90,7 @@ actor CloudKitDatabaseService: DatabaseService {
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
+              debugPrint(error)
               continuation.resume(throwing: error)
             }
           },
@@ -107,6 +108,7 @@ actor CloudKitDatabaseService: DatabaseService {
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
+              debugPrint(error)
               continuation.resume(throwing: error)
             }
           },
@@ -132,6 +134,7 @@ actor CloudKitDatabaseService: DatabaseService {
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
+              debugPrint(error)
               continuation.resume(throwing: error)
               return
             }
@@ -155,6 +158,7 @@ actor CloudKitDatabaseService: DatabaseService {
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
+              debugPrint(error)
               continuation.resume(throwing: error)
               return
             }
@@ -184,6 +188,7 @@ actor CloudKitDatabaseService: DatabaseService {
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
+              debugPrint(error)
               continuation.resume(throwing: error)
             }
           },
@@ -237,6 +242,7 @@ actor CloudKitDatabaseService: DatabaseService {
     try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
       operation.fetchRecordZoneChangesResultBlock = { result in
         if case .failure(let error) = result {
+          debugPrint(error)
           continuation.resume(throwing: error)
           return
         }
@@ -257,6 +263,7 @@ actor CloudKitDatabaseService: DatabaseService {
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
+              debugPrint(error)
               continuation.resume(throwing: error)
               return
             }
@@ -277,6 +284,7 @@ actor CloudKitDatabaseService: DatabaseService {
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
+              debugPrint(error)
               continuation.resume(throwing: error)
               return
             }

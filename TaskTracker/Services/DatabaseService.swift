@@ -20,11 +20,16 @@ protocol DatabaseService: Actor {
 }
 
 actor CloudKitDatabaseService: DatabaseService {
+  // TODO: Persist whether zone has been created.
   static let zoneID = CKRecordZone.ID(zoneName: "Tasks")
+
+  // TODO: Persist local cache atomically with changeToken.
   var tasks = [Task.ID: Task]()
 
   private let container = CKContainer.default()
   private let database: CKDatabase
+
+  // TODO: Persist whether subscription has been created.
   private let subscriptionID = "task-changes"
   private var changeToken: CKServerChangeToken?
 
@@ -74,6 +79,7 @@ actor CloudKitDatabaseService: DatabaseService {
     }
 
     precondition(zone.capabilities.contains(.fetchChanges))
+    precondition(CloudKitDatabaseService.zoneID == zone.zoneID)
   }
 
   private func fetchRecordZone() async throws -> CKRecordZone {
@@ -140,8 +146,8 @@ actor CloudKitDatabaseService: DatabaseService {
     let subscription = CKRecordZoneSubscription(
       zoneID: CloudKitDatabaseService.zoneID, subscriptionID: subscriptionID)
     subscription.recordType = "Task"
-    subscription.notificationInfo = CKSubscription.NotificationInfo(
-      shouldSendContentAvailable: true)
+    subscription.notificationInfo =
+      CKSubscription.NotificationInfo(shouldSendContentAvailable: true)
     try await withCancellableThrowingContinuation { continuation in
       database
         .save(subscription: subscription)
@@ -194,7 +200,7 @@ actor CloudKitDatabaseService: DatabaseService {
         as? CKRecordZoneNotification,
       notification.subscriptionID == subscriptionID,
       notification.databaseScope == .private,
-      notification.recordZoneID == CloudKitDatabaseService.zoneID
+      notification.recordZoneID?.zoneName == CloudKitDatabaseService.zoneID.zoneName
     else {
       return false
     }

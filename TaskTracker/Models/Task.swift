@@ -36,10 +36,9 @@ struct Task: Comparable, Identifiable {
   }
 
   init() {
-    self.init(
-      from: CKRecord(
-        recordType: "Task",
-        recordID: CKRecord.ID(zoneID: CloudKitDatabaseService.zoneID)))
+    self.init(from: CKRecord(
+      recordType: "Task",
+      recordID: CKRecord.ID(zoneID: CloudKitDatabaseService.zoneID)))
     self.status = .Open
   }
 

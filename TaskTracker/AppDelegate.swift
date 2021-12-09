@@ -12,6 +12,29 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
   func application(
     _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+  ) -> Bool {
+    application.registerForRemoteNotifications()
+    return true
+  }
+
+  func application(
+    _ application: UIApplication,
+    didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+  ) {
+    precondition(application.isRegisteredForRemoteNotifications)
+  }
+
+  func application(
+    _ application: UIApplication,
+    didFailToRegisterForRemoteNotificationsWithError error: Error
+  ) {
+    debugPrint(error)
+    preconditionFailure()
+  }
+
+  func application(
+    _ application: UIApplication,
     didReceiveRemoteNotification userInfo: [AnyHashable: Any]
   ) async -> UIBackgroundFetchResult {
     do {

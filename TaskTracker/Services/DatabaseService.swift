@@ -24,6 +24,7 @@ actor CloudKitDatabaseService: DatabaseService {
   static let zoneID = CKRecordZone.ID(zoneName: "Tasks")
 
   // TODO: Persist local cache atomically with changeToken.
+  // TODO: Notify DatabaseViewModel when this changes.
   var tasks = [Task.ID: Task]()
 
   private let container = CKContainer.default()

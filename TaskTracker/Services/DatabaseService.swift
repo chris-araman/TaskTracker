@@ -8,7 +8,6 @@
 import CloudKit
 import Combine
 import CombineCloudKit
-import SwiftUI
 
 @MainActor
 protocol DatabaseService {
@@ -142,9 +141,7 @@ class CloudKitDatabaseService: DatabaseService {
             }
           },
           receiveValue: { tasks in
-            withAnimation {
-              self.subject.value = tasks
-            }
+            self.subject.value = tasks
             continuation.resume()
           }
         )
@@ -212,14 +209,12 @@ class CloudKitDatabaseService: DatabaseService {
 
     precondition(Set(tasksToUpdate.keys).isDisjoint(with: tasksToRemove))
 
-    withAnimation {
-      // Apply changes to local state.
-      for task in tasksToRemove {
-        subject.value.removeValue(forKey: task)
-      }
-
-      subject.value.merge(tasksToUpdate) { (old, new) in new }
+    // Apply changes to local state.
+    for task in tasksToRemove {
+      subject.value.removeValue(forKey: task)
     }
+
+    subject.value.merge(tasksToUpdate) { (old, new) in new }
 
     changeToken = newChangeToken
 
@@ -293,27 +288,15 @@ class CloudKitDatabaseService: DatabaseService {
 
   // Returns the tasks that were updated.
   @discardableResult private func update(_ tasks: [Task]) -> [Task] {
-    guard !tasks.isEmpty else {
-      return []
-    }
-
-    return withAnimation {
-      tasks.compactMap { task in
-        self.subject.value.updateValue(task, forKey: task.id)
-      }
+    tasks.compactMap { task in
+      self.subject.value.updateValue(task, forKey: task.id)
     }
   }
 
   // Returns the tasks that were removed.
   @discardableResult private func remove(_ taskIDs: [Task.ID]) -> [Task] {
-    guard !taskIDs.isEmpty else {
-      return []
-    }
-
-    return withAnimation {
-      taskIDs.compactMap { taskID in
-        self.subject.value.removeValue(forKey: taskID)
-      }
+    taskIDs.compactMap { taskID in
+      self.subject.value.removeValue(forKey: taskID)
     }
   }
 }

@@ -23,6 +23,7 @@ struct TasksView: View {
           database.delete(toDelete)
         }
       }
+      .animation(.default, value: database.tasks)
 #if !targetEnvironment(macCatalyst)
       // TODO: Add a Refresh menu item bound to ⌘-R for macOS
       .refreshable {

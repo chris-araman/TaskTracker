@@ -8,6 +8,7 @@
 import CloudKit
 import Combine
 import CombineCloudKit
+import SwiftUI
 
 @MainActor
 protocol DatabaseService {
@@ -141,7 +142,9 @@ class CloudKitDatabaseService: DatabaseService {
             }
           },
           receiveValue: { tasks in
-            self.map = tasks
+            withAnimation {
+              self.map = tasks
+            }
             continuation.resume()
           }
         )
@@ -209,12 +212,15 @@ class CloudKitDatabaseService: DatabaseService {
 
     precondition(Set(tasksToUpdate.keys).isDisjoint(with: tasksToRemove))
 
-    // Apply changes to local state.
-    for task in tasksToRemove {
-      map.removeValue(forKey: task)
+    withAnimation {
+      // Apply changes to local state.
+      for task in tasksToRemove {
+        map.removeValue(forKey: task)
+      }
+
+      map.merge(tasksToUpdate) { (old, new) in new }
     }
 
-    map.merge(tasksToUpdate) { (old, new) in new }
     changeToken = newChangeToken
 
     return true
@@ -236,7 +242,9 @@ class CloudKitDatabaseService: DatabaseService {
             continuation.resume()
           },
           receiveValue: { record in
-            self.map.updateValue(Task(from: record), forKey: record.recordID)
+            withAnimation {
+              _ = self.map.updateValue(Task(from: record), forKey: record.recordID)
+            }
           }
         )
     }
@@ -258,7 +266,9 @@ class CloudKitDatabaseService: DatabaseService {
             continuation.resume()
           },
           receiveValue: { recordID in
-            self.map.removeValue(forKey: recordID)
+            withAnimation {
+              _ = self.map.removeValue(forKey: recordID)
+            }
           }
         )
     }

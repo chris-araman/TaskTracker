@@ -227,6 +227,7 @@ class CloudKitDatabaseService: DatabaseService {
   }
 
   func save(_ task: Task) async throws {
+    var tasksRemaining = self.update([task])
     try await withCancellableThrowingContinuation { continuation in
       database
         .save(record: task.record)
@@ -235,42 +236,80 @@ class CloudKitDatabaseService: DatabaseService {
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
               debugPrint(error)
+
+              if tasksRemaining.isEmpty {
+                // Remove any tasks that were not successfully added.
+                self.remove([task.id])
+              } else {
+                // Restore any tasks that were not successfully updated.
+                self.update(tasksRemaining)
+              }
+
               continuation.resume(throwing: error)
               return
             }
 
+            precondition(tasksRemaining.isEmpty)
             continuation.resume()
           },
           receiveValue: { record in
-            withAnimation {
-              _ = self.map.updateValue(Task(from: record), forKey: record.recordID)
-            }
+            tasksRemaining.removeAll { $0.id == record.recordID }
           }
         )
     }
   }
 
-  func delete(_ tasks: [Task.ID]) async throws {
+  func delete(_ taskIDs: [Task.ID]) async throws {
+    var tasksRemaining = self.remove(taskIDs)
     try await withCancellableThrowingContinuation { continuation in
       database
-        .delete(recordIDs: tasks)
+        .delete(recordIDs: taskIDs)
         .receive(on: DispatchQueue.main)
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
               debugPrint(error)
+
+              // Restore any tasks that were not successfully deleted.
+              self.update(tasksRemaining)
+
               continuation.resume(throwing: error)
               return
             }
 
+            precondition(tasksRemaining.isEmpty)
             continuation.resume()
           },
           receiveValue: { recordID in
-            withAnimation {
-              _ = self.map.removeValue(forKey: recordID)
-            }
+            tasksRemaining.removeAll { $0.id == recordID }
           }
         )
+    }
+  }
+
+  // Returns the tasks that were updated.
+  @discardableResult private func update(_ tasks: [Task]) -> [Task] {
+    guard !tasks.isEmpty else {
+      return []
+    }
+
+    return withAnimation {
+      tasks.compactMap { task in
+        self.map.updateValue(task, forKey: task.id)
+      }
+    }
+  }
+
+  // Returns the tasks that were removed.
+  @discardableResult private func remove(_ taskIDs: [Task.ID]) -> [Task] {
+    guard !taskIDs.isEmpty else {
+      return []
+    }
+
+    return withAnimation {
+      taskIDs.compactMap { taskID in
+        self.map.removeValue(forKey: taskID)
+      }
     }
   }
 }

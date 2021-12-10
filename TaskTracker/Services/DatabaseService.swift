@@ -29,7 +29,7 @@ class CloudKitDatabaseService: DatabaseService {
   private let subscriptionID = "task-changes"
 
   // TODO: Persist local cache atomically with changeToken.
-  @Published private var map = [Task.ID: Task]()
+  private var subject = CurrentValueSubject<[Task.ID: Task], Never>([:])
   private var changeToken: CKServerChangeToken?
 
   init() {
@@ -37,7 +37,7 @@ class CloudKitDatabaseService: DatabaseService {
   }
 
   var tasks: AnyPublisher<[Task], Never> {
-    $map.map { tasks in
+    subject.map { tasks in
       tasks.values.sorted()
     }.eraseToAnyPublisher()
   }
@@ -143,7 +143,7 @@ class CloudKitDatabaseService: DatabaseService {
           },
           receiveValue: { tasks in
             withAnimation {
-              self.map = tasks
+              self.subject.value = tasks
             }
             continuation.resume()
           }
@@ -215,10 +215,10 @@ class CloudKitDatabaseService: DatabaseService {
     withAnimation {
       // Apply changes to local state.
       for task in tasksToRemove {
-        map.removeValue(forKey: task)
+        subject.value.removeValue(forKey: task)
       }
 
-      map.merge(tasksToUpdate) { (old, new) in new }
+      subject.value.merge(tasksToUpdate) { (old, new) in new }
     }
 
     changeToken = newChangeToken
@@ -299,7 +299,7 @@ class CloudKitDatabaseService: DatabaseService {
 
     return withAnimation {
       tasks.compactMap { task in
-        self.map.updateValue(task, forKey: task.id)
+        self.subject.value.updateValue(task, forKey: task.id)
       }
     }
   }
@@ -312,7 +312,7 @@ class CloudKitDatabaseService: DatabaseService {
 
     return withAnimation {
       taskIDs.compactMap { taskID in
-        self.map.removeValue(forKey: taskID)
+        self.subject.value.removeValue(forKey: taskID)
       }
     }
   }

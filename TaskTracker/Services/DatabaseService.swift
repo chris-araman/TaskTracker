@@ -9,8 +9,9 @@ import CloudKit
 import Combine
 import CombineCloudKit
 
-protocol DatabaseService: Actor {
-  var tasks: [Task.ID: Task] { get }
+@MainActor
+protocol DatabaseService {
+  var tasks: AnyPublisher<[Task], Never> { get }
 
   func ready() async -> Bool
   func fetchAll() async throws
@@ -19,23 +20,25 @@ protocol DatabaseService: Actor {
   func didReceiveRemoteNotification(_ userInfo: [AnyHashable: Any]) async throws -> Bool
 }
 
-actor CloudKitDatabaseService: DatabaseService {
-  // TODO: Persist whether zone has been created.
+class CloudKitDatabaseService: DatabaseService {
   static let zoneID = CKRecordZone.ID(zoneName: "Tasks")
-
-  // TODO: Persist local cache atomically with changeToken.
-  // TODO: Notify DatabaseViewModel when this changes.
-  var tasks = [Task.ID: Task]()
 
   private let container = CKContainer.default()
   private let database: CKDatabase
-
-  // TODO: Persist whether subscription has been created.
   private let subscriptionID = "task-changes"
+
+  // TODO: Persist local cache atomically with changeToken.
+  @Published private var map = [Task.ID: Task]()
   private var changeToken: CKServerChangeToken?
 
   init() {
-    database = container.privateCloudDatabase
+    self.database = container.privateCloudDatabase
+  }
+
+  var tasks: AnyPublisher<[Task], Never> {
+    $map.map {
+      $0.values.sorted()
+    }.eraseToAnyPublisher()
   }
 
   func ready() async -> Bool {
@@ -52,10 +55,6 @@ actor CloudKitDatabaseService: DatabaseService {
     }
 
     return true
-  }
-
-  func fetch() async -> [Task.ID: Task] {
-    tasks
   }
 
   private func accountStatus() async -> CKAccountStatus {
@@ -133,6 +132,7 @@ actor CloudKitDatabaseService: DatabaseService {
 
           return map
         }
+        .receive(on: DispatchQueue.main)
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
@@ -141,7 +141,7 @@ actor CloudKitDatabaseService: DatabaseService {
             }
           },
           receiveValue: { tasks in
-            self.tasks = tasks
+            self.map = tasks
             continuation.resume()
           }
         )
@@ -159,22 +159,30 @@ actor CloudKitDatabaseService: DatabaseService {
       return false
     }
 
+    // Fetch changes from iCloud.
+    var tasksToUpdate = [Task.ID: Task]()
+    var tasksToRemove = Set<Task.ID>()
+    var newChangeToken: CKServerChangeToken?
     let operation = CKFetchRecordZoneChangesOperation(
       recordZoneIDs: [CloudKitDatabaseService.zoneID],
-      configurationsByRecordZoneID: [CloudKitDatabaseService.zoneID: .init(previousServerChangeToken: changeToken)])
+      configurationsByRecordZoneID: [
+        CloudKitDatabaseService.zoneID: .init(previousServerChangeToken: changeToken)
+      ])
     operation.recordWasChangedBlock = { recordID, result in
       guard case .success(let record) = result else {
         return
       }
 
-      self.tasks.updateValue(Task(from: record), forKey: recordID)
+      tasksToUpdate.updateValue(Task(from: record), forKey: recordID)
+      tasksToRemove.remove(recordID)
     }
     operation.recordWithIDWasDeletedBlock = { recordID, _ in
-      self.tasks.removeValue(forKey: recordID)
+      tasksToUpdate.removeValue(forKey: recordID)
+      tasksToRemove.insert(recordID)
     }
     operation.recordZoneChangeTokensUpdatedBlock = { recordZoneID, token, _ in
       precondition(recordZoneID == CloudKitDatabaseService.zoneID)
-      self.changeToken = token
+      newChangeToken = token
     }
     operation.recordZoneFetchResultBlock = { recordZoneID, result in
       guard case .success(let (token, _, _)) = result else {
@@ -182,7 +190,7 @@ actor CloudKitDatabaseService: DatabaseService {
       }
 
       precondition(recordZoneID == CloudKitDatabaseService.zoneID)
-      self.changeToken = token
+      newChangeToken = token
     }
 
     try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
@@ -199,6 +207,16 @@ actor CloudKitDatabaseService: DatabaseService {
       database.add(operation)
     }
 
+    precondition(Set(tasksToUpdate.keys).isDisjoint(with: tasksToRemove))
+
+    // Apply changes to local state.
+    for task in tasksToRemove {
+      map.removeValue(forKey: task)
+    }
+
+    map.merge(tasksToUpdate) { (old, new) in new }
+    changeToken = newChangeToken
+
     return true
   }
 
@@ -206,6 +224,7 @@ actor CloudKitDatabaseService: DatabaseService {
     try await withCancellableThrowingContinuation { continuation in
       database
         .save(record: task.record)
+        .receive(on: DispatchQueue.main)
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
@@ -217,7 +236,7 @@ actor CloudKitDatabaseService: DatabaseService {
             continuation.resume()
           },
           receiveValue: { record in
-            self.tasks.updateValue(Task(from: record), forKey: record.recordID)
+            self.map.updateValue(Task(from: record), forKey: record.recordID)
           }
         )
     }
@@ -227,6 +246,7 @@ actor CloudKitDatabaseService: DatabaseService {
     try await withCancellableThrowingContinuation { continuation in
       database
         .delete(recordIDs: tasks)
+        .receive(on: DispatchQueue.main)
         .sink(
           receiveCompletion: { completion in
             if case .failure(let error) = completion {
@@ -238,7 +258,7 @@ actor CloudKitDatabaseService: DatabaseService {
             continuation.resume()
           },
           receiveValue: { recordID in
-            self.tasks.removeValue(forKey: recordID)
+            self.map.removeValue(forKey: recordID)
           }
         )
     }

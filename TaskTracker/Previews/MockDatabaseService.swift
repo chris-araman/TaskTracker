@@ -6,11 +6,11 @@
 //
 
 import CloudKit
+import Combine
 
-actor MockDatabaseService: DatabaseService {
-  var tasks: [Task.ID: Task] {
-    let task = Task(name: "Foo")
-    return [task.id: task]
+class MockDatabaseService: DatabaseService {
+  var tasks: AnyPublisher<[Task], Never> {
+    Just([Task(name: "Foo")]).eraseToAnyPublisher()
   }
 
   func ready() async -> Bool {

@@ -19,6 +19,7 @@ class DatabaseViewModel: ObservableObject {
 
   init(database: DatabaseService) {
     self.database = database
+    self.database.tasks.assign(to: &$tasks)
     _Concurrency.Task.detached {
       await self.operate {
         let ready = await self.database.ready()
@@ -58,11 +59,6 @@ class DatabaseViewModel: ObservableObject {
     } catch {
       self.error = error
       return
-    }
-
-    let tasks = await self.database.tasks
-    withAnimation {
-      self.tasks = tasks.values.sorted()
     }
   }
 }

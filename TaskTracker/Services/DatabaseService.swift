@@ -37,8 +37,8 @@ class CloudKitDatabaseService: DatabaseService {
   }
 
   var tasks: AnyPublisher<[Task], Never> {
-    $map.map {
-      $0.values.sorted()
+    $map.map { tasks in
+      tasks.values.sorted()
     }.eraseToAnyPublisher()
   }
 
@@ -253,7 +253,9 @@ class CloudKitDatabaseService: DatabaseService {
             continuation.resume()
           },
           receiveValue: { record in
-            tasksRemaining.removeAll { $0.id == record.recordID }
+            tasksRemaining.removeAll { task in
+              task.id == record.recordID
+            }
           }
         )
     }
@@ -281,7 +283,9 @@ class CloudKitDatabaseService: DatabaseService {
             continuation.resume()
           },
           receiveValue: { recordID in
-            tasksRemaining.removeAll { $0.id == recordID }
+            tasksRemaining.removeAll { task in
+              task.id == recordID
+            }
           }
         )
     }

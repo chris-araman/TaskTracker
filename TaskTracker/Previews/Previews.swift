@@ -23,6 +23,6 @@ struct TasksView_Previews: PreviewProvider {
 
 struct TaskRow_Previews: PreviewProvider {
   static var previews: some View {
-    TaskRow(task: Task(name: "☑️ Some Task"))
+    TaskRow(task: .constant(Task(name: "☑️ Some Task")))
   }
 }

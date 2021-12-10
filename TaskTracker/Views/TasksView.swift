@@ -13,7 +13,7 @@ struct TasksView: View {
   var body: some View {
     NavigationView {
       List {
-        ForEach(database.tasks) { task in
+        ForEach($database.tasks) { task in
           TaskRow(task: task)
         }
         .onDelete { indices in

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TaskRow: View {
   @EnvironmentObject var database: DatabaseViewModel
-  @State var task: Task
+  @Binding var task: Task
 
   var body: some View {
     HStack {

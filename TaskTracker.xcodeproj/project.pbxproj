@@ -129,11 +129,11 @@
 		F8E140BF2511935F003B4289 = {
 			isa = PBXGroup;
 			children = (
+				C5B5348326DEF8500017BE02 /* Frameworks */,
+				F8E140C92511935F003B4289 /* Products */,
 				F8E140CA2511935F003B4289 /* TaskTracker */,
 				F8E140DC25119361003B4289 /* TaskTrackerTests */,
 				F8E140E725119361003B4289 /* TaskTrackerUITests */,
-				C5B5348326DEF8500017BE02 /* Frameworks */,
-				F8E140C92511935F003B4289 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -151,16 +151,16 @@
 			isa = PBXGroup;
 			children = (
 				C516F2E426DD66E900CEB590 /* TaskTracker.entitlements */,
-				F8E140CF25119360003B4289 /* Assets.xcassets */,
 				F8E140D425119360003B4289 /* Info.plist */,
 				F8E140CB2511935F003B4289 /* App.swift */,
 				C585ECEF2761D22500987F54 /* AppDelegate.swift */,
 				C5635DD127597DAF00381BEC /* Concurrency.swift */,
+				F8E140CF25119360003B4289 /* Assets.xcassets */,
 				F8BC899C251F9C9A00566416 /* Models */,
 				F8E140D125119360003B4289 /* Previews */,
 				C52F9E3A27573AC90016AD7B /* Services */,
-				F8E141562511A64A003B4289 /* Views */,
 				C50581652727B80500D7FEB6 /* ViewModels */,
+				F8E141562511A64A003B4289 /* Views */,
 			);
 			path = TaskTracker;
 			sourceTree = "<group>";
@@ -177,8 +177,8 @@
 		F8E140DC25119361003B4289 /* TaskTrackerTests */ = {
 			isa = PBXGroup;
 			children = (
-				F8E140DD25119361003B4289 /* TaskTrackerTests.swift */,
 				F8E140DF25119361003B4289 /* Info.plist */,
+				F8E140DD25119361003B4289 /* TaskTrackerTests.swift */,
 			);
 			path = TaskTrackerTests;
 			sourceTree = "<group>";
@@ -186,8 +186,8 @@
 		F8E140E725119361003B4289 /* TaskTrackerUITests */ = {
 			isa = PBXGroup;
 			children = (
-				F8E140E825119361003B4289 /* TaskTrackerUITests.swift */,
 				F8E140EA25119361003B4289 /* Info.plist */,
+				F8E140E825119361003B4289 /* TaskTrackerUITests.swift */,
 			);
 			path = TaskTrackerUITests;
 			sourceTree = "<group>";
@@ -196,8 +196,8 @@
 			isa = PBXGroup;
 			children = (
 				F8E1419B2512BFC3003B4289 /* AddTaskView.swift */,
-				B5CAD10E26C21BD900A4102E /* TasksView.swift */,
 				F8E141A6251312CC003B4289 /* TaskRow.swift */,
+				B5CAD10E26C21BD900A4102E /* TasksView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

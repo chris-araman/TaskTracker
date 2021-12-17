@@ -29,8 +29,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     _ application: UIApplication,
     didFailToRegisterForRemoteNotificationsWithError error: Error
   ) {
+    #warning("TODO: Handle registration failure gracefully. Ignore on simulators.")
     debugPrint(error)
-    preconditionFailure()
   }
 
   func application(

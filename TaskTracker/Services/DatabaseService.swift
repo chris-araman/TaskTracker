@@ -27,7 +27,7 @@ class CloudKitDatabaseService: DatabaseService {
   private let database: CKDatabase
   private let subscriptionID = "task-changes"
 
-  // TODO: Persist local cache atomically with changeToken.
+  #warning("Persist local cache atomically with changeToken.")
   private var subject = CurrentValueSubject<[Task.ID: Task], Never>([:])
   private var changeToken: CKServerChangeToken?
 

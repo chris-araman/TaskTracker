@@ -12,7 +12,7 @@ import SwiftUI
 class DatabaseViewModel: ObservableObject {
   @Published var tasks = [Task]()
 
-  // TODO: Display this
+  #warning("TODO: Display the error.")
   @Published var error: Error?
 
   private let database: DatabaseService
@@ -24,7 +24,7 @@ class DatabaseViewModel: ObservableObject {
       await self.operate {
         let ready = await self.database.ready()
         if !ready {
-          // TODO: self.error =
+          #warning("TODO: Assign self.error.")
         }
       }
     }
